@@ -1,0 +1,63 @@
+<div class="content-main">
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="cl-default-dark">Clientes</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <th class="cl-default">ID</th>
+                        <th class="cl-default">Nome</th>
+                        <th class="cl-default">E-Mail</th>
+                        <th class="cl-default">Endereço</th>
+                        <th class="cl-default">Telefones</th>
+                        <th class="cl-default">Serviços</th>
+    
+                    </thead>
+                    <tbody>
+                       <tr [hidden]="(loading == false && clientes.length > 0)">
+                        <td colspan="6"> 
+                            <div class="d-flex justify-content-center">
+                                <loading message="Nenhum cliente encontrado" [showMessage]="loading == false && clientes.length == 0"
+                                 [status]="loading"  size="80px"></loading>
+                            </div>
+                        </td>
+                       </tr>
+                        <tr *ngFor="let cliente of clientes">
+                            <td data-label="ID" class="cl-default">1</td>
+                            <td data-label="Nome"  class="cl-default">João Santos</td>
+                            <td data-label="E-Mail"  class="cl-default">joao@gmail.com</td>
+                            <td data-label="Endereço"  class="cl-default"><icon name="endereco" class="fill-primary" size="23px"></icon></td>
+                            <td data-label="Telefones"  class="cl-default"><icon name="telefone" class="fill-primary" size="23px"></icon></td>
+                            <td data-label="Serviços"  class="cl-default"><icon name="lista_servicos" class="fill-primary" size="23px"></icon></td>
+                        </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modalm" style="
+height: 100%;
+width: 100%;
+opacity: 0.2;
+background: black;
+display: flex;
+position: fixed;
+justify-content: center;
+align-items: center;
+top: 0;
+z-index: 1100000;
+bottom: 0;
+">
+    <div class="modal-container">
+        asad
+    </div>
+  </div>

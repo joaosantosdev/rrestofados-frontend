@@ -1,0 +1,9 @@
+
+<div *ngIf="status" class="lds-ring">
+
+    <div [style]="getStyle()"></div>
+    <div [style]="getStyle()"></div>
+    <div [style]="getStyle()"></div>
+    <div [style]="getStyle()"></div>
+</div>
+<h5 *ngIf="showMessage" class="cl-default-dark text-center">{{message}}</h5>
