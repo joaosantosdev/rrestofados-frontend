@@ -1,0 +1,25 @@
+.checkbox{
+  width: 25px;
+  height: 25px;
+  border:2px solid var(--content-dark);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.checkbox input{
+  display: none;
+}
+.checkbox .active{
+  width: 17px;
+  height: 17px;
+  background-color:var(--content-dark);
+  border-radius: var(--radius);
+
+}
+
+.no-active{
+  display: none!important;
+}

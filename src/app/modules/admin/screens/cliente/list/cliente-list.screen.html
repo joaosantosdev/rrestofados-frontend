@@ -1,11 +1,25 @@
+
 <div class="content-main">
-    
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <h1 class="cl-default-dark">Clientes</h1>
             </div>
         </div>
+      <div class="row">
+        <div class="col-md-8 mt-1">
+          <input [(ngModel)]="paginacao.search"  placeholder="" class="input">
+        </div>
+        <div class="col-md-2 mt-1">
+          <button class="button primary btn-block" (click)="pesquisar()">Pesquisar</button>
+
+        </div>
+        <div class="col-md-2 mt-1">
+          <button class="button primary btn-block" routerLink="novo">Novo cliente</button>
+
+        </div>
+      </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table">
@@ -13,14 +27,12 @@
                         <th class="cl-default">ID</th>
                         <th class="cl-default">Nome</th>
                         <th class="cl-default">E-Mail</th>
-                        <th class="cl-default">Endereço</th>
-                        <th class="cl-default">Telefones</th>
-                        <th class="cl-default">Serviços</th>
-    
+                        <th class="cl-default">Opcoes</th>
+
                     </thead>
                     <tbody>
                        <tr [hidden]="(loading == false && clientes.length > 0)">
-                        <td colspan="6"> 
+                        <td colspan="6">
                             <div class="d-flex justify-content-center">
                                 <loading message="Nenhum cliente encontrado" [showMessage]="loading == false && clientes.length == 0"
                                  [status]="loading"  size="80px"></loading>
@@ -28,36 +40,152 @@
                         </td>
                        </tr>
                         <tr *ngFor="let cliente of clientes">
-                            <td data-label="ID" class="cl-default">1</td>
-                            <td data-label="Nome"  class="cl-default">João Santos</td>
-                            <td data-label="E-Mail"  class="cl-default">joao@gmail.com</td>
-                            <td data-label="Endereço"  class="cl-default"><icon name="endereco" class="fill-primary" size="23px"></icon></td>
-                            <td data-label="Telefones"  class="cl-default"><icon name="telefone" class="fill-primary" size="23px"></icon></td>
-                            <td data-label="Serviços"  class="cl-default"><icon name="lista_servicos" class="fill-primary" size="23px"></icon></td>
+                            <td data-label="ID" class="cl-default">{{cliente.id}}</td>
+                            <td data-label="Nome"  class="cl-default">{{cliente.nome}}</td>
+                            <td data-label="E-Mail"  class="cl-default">{{cliente.email}}</td>
+                            <td data-label="Opcoes"  class="cl-default">
+                              <div class="row">
+                                <div class="col-md-2 col-2">
+                                  <icon (click)="openDialogEndereco(cliente)" name="endereco" class=" c-pointer fill-default" size="23px"></icon>
+                                </div>
+                                <div class="col-md-2 col-2">
+                                  <icon name="telefone" (click)="openDialogTelefone(cliente)" class="c-pointer fill-default" size="23px"></icon>
+                                </div>
+                                <div class="col-md-2 col-2">
+                                  <icon name="lista_servicos" class=" c-pointer fill-default" size="23px"></icon>
+                                </div>
+                                <div class="col-md-2 col-2">
+                                  <icon routerLink="editar/{{cliente.id}}" name="edit" class=" c-pointer fill-default" size="23px"></icon>
+                                </div>
+                                <div class="col-md-2 col-2">
+                                  <icon (click)="openDelete(cliente)" name="trash" class=" c-pointer fill-default" size="23px"></icon>
+                                </div>
+                              </div>
+
+                            </td>
+
                         </tr>
-    
+
                     </tbody>
                 </table>
             </div>
 
         </div>
+        <pagination [paginator]="paginacao"  [change]="changePage"></pagination>
     </div>
 </div>
 
-<div class="modalm" style="
-height: 100%;
-width: 100%;
-opacity: 0.2;
-background: black;
-display: flex;
-position: fixed;
-justify-content: center;
-align-items: center;
-top: 0;
-z-index: 1100000;
-bottom: 0;
-">
-    <div class="modal-container">
-        asad
+<modal-dialog classStyle="confirm" [ref]="dialogExcluir" title="Atencao" name="clienteDelete">
+  <div class="row" style="margin-bottom: 0px!important;">
+    <div class="col-md-12 mb-2">
+      <p>Deseja realmente excluir essse cliente ?</p>
+    </div>
+
+  </div>
+  <div class="row" style="margin-bottom: 0px!important;">
+    <div class="col-md-12">
+      <button (click)="deleteCliente()"  class="button success">Sim</button>
+      <button (click)="closeDelete()" class="button danger ml-2" >Não</button>
     </div>
   </div>
+</modal-dialog>
+
+<modal-dialog alert="true" [ref]="dialogConfirmar" title="Sucesso" name="clienteSucess">
+  <div class="row" style="margin-bottom: 0px!important;">
+    <div class="col-md-12">
+      <p>Cliente excluido com sucesso!</p>
+    </div>
+
+  </div>
+
+</modal-dialog>
+
+<modal-dialog classStyle="dialogEndereco" [ref]="dialogEndereco"  title="Endereco" name="Endereco">
+  <div class="row">
+    <div class="col-md-6 font-weight-bold">
+      CEP
+    </div>
+    <div class="col-md-6">
+      {{cliente.endereco.cep}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 font-weight-bold">
+      Rua
+    </div>
+    <div class="col-md-6">
+      {{cliente.endereco.rua}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 font-weight-bold">
+      Número
+    </div>
+    <div class="col-md-6">
+      {{cliente.endereco.numero}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 font-weight-bold">
+      Bairro
+    </div>
+    <div class="col-md-6">
+      {{cliente.endereco.bairro}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 font-weight-bold">
+      Municipio
+    </div>
+    <div class="col-md-6">
+      {{cliente.endereco.municipio.nome}}
+    </div>
+  </div>  <div class="row">
+  <div class="col-md-6 font-weight-bold">
+    Estado
+  </div>
+  <div class="col-md-6">
+    {{cliente.endereco.municipio.estado.nome}}
+  </div>
+</div>
+
+
+</modal-dialog>
+
+
+
+<modal-dialog [ref]="dialogTelefone"  title="Telefones" name="telefone">
+  <div class="telefone-list mb-2" *ngFor="let telefone of cliente.telefones">
+    <div class="row">
+      <div class="col-md-6 font-weight-bold">
+        Número
+      </div>
+      <div class="col-md-6">
+        {{telefone.numero}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 font-weight-bold">
+        Descricao
+      </div>
+      <div class="col-md-6">
+        {{telefone.descricao}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 font-weight-bold">
+        Whatsapp
+      </div>
+      <div class="col-md-6">
+        {{telefone.whatsapp?'Sim': 'Não'}}
+      </div>
+    </div>
+  </div>
+
+
+
+</modal-dialog>
+
+
+
+

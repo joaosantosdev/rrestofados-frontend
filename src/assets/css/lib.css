@@ -3,16 +3,16 @@ body {
 }
 
 :root {
-  --primary: #3498db !important;
-  --primary-dark: #2980b9 !important;
+  --primary: #FF5C50 !important;
+  --primary-dark: #802E2E !important;
   --danger: #fa5d43 !important;
   --danger-dark: #bb4532 !important;
   --warning: #ffe44f !important;
   --warning-dark: #ffce2e;
   --success: #05c3a1 !important;
-  --success-dark: #0598c3 !important;
+  --success-dark: #DEEFFF !important;
   --secondary: #da1178 !important;
-  --secondary-dark: #5635cc !important;
+  --secondary-dark: #cc4b42 !important;
   --default: #6c757d !important;
   --default-dark: #525353 !important;
   --content: #ECECEC !important;
@@ -31,6 +31,7 @@ body {
   --font-semi-bold: RalewaySemiBold;
   --font-regular: RalewayRegular;
   --shadow : 0px 0px 36px -30px rgba(0, 0, 0, 0.75) !important;
+  --disabled-color:#fbf5f5;
 }
 
 .center-sm {
@@ -61,6 +62,10 @@ body {
   width: 50px;
 }
 
+.disabled[disabled]{
+  background-color: var(--disabled-color);
+  cursor: no-drop;
+}
 .opcional {
   display: initial;
   font-family: RalewayRegular;
@@ -70,7 +75,18 @@ body {
 .border-radius {
   border-radius: 0.25rem;
 }
-
+@font-face {
+  font-family: RalewayMedium;
+  src: url('../fonts/raleway/Raleway-Medium.ttf');
+}
+@font-face {
+  font-family: RalewayExtraLight;
+  src: url('../fonts/raleway/Raleway-ExtraLight.ttf');
+}
+@font-face {
+  font-family: RalewayLight;
+  src: url('../fonts/raleway/Raleway-Light.ttf');
+}
 @font-face {
   font-family: RalewayRegular;
   src: url('../fonts/raleway/Raleway-Regular.ttf');
@@ -496,7 +512,7 @@ body {
 }
 
 .input-text {
-  width: 45px;
+  width: 59px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -533,7 +549,7 @@ body {
 .group.right > .input {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  padding-left: 0;
+  padding-left: 10px;
 }
 
 .group.right > .input-text {
@@ -598,7 +614,7 @@ body {
 
 .error > .input {
   border: var(--border-size-outline) solid var(--danger-dark);
-
+  margin-top: -4px;
   color: var(--danger-dark)
 }
 
@@ -869,7 +885,10 @@ body {
 .c-pointer{
   cursor: pointer!important;
 }
-
+.disabled{
+  background-color: var(--disabled-color)!important;
+  cursor: no-drop!important;
+}
 .active-primary{
   color: var(--primary);
   fill: var(--primary);
@@ -902,4 +921,24 @@ body {
     td{
         text-align: left;
     }
+}
+
+
+.dialog-100{
+  left: 0!important;
+}
+
+.page-item{
+  outline: none!important;
+}
+.page-link {
+  color: var(--primary-dark)!important;
+  background-color: #fff;
+  outline: none!important;
+  border: 1px solid var(--content)!important;
+}
+.page-item.active .page-link{
+
+  background-color: var(--primary-dark);
+  color: var(--white)!important;
 }

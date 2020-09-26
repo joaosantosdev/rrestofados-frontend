@@ -53,8 +53,13 @@
 
     if (window.innerWidth <= 996) {
       $('#floating-dashboard-sidebar').removeClass('floating-dashboard-sidebar-open')
+      $('.dialog-container').addClass('dialog-100')
+
       $('#content-dashboard-black').removeClass('content-dashboard-black')
       $('#sidebar').removeClass('open-sidebar')
+    }else{
+      $('.dialog-container').removeClass('dialog-100')
+
     }
   });
   $(document).on('click', '.toggle-sidebar', () => {
@@ -82,4 +87,35 @@
 
 
   })
+
+
+
+  //lib
+
+  $(document).on('click','.toggle-dialog',function(){
+    let toggle = $(this);
+    let dialog = toggle.data('dialog');
+    $(dialog).addClass('open-dialog')
+    console.log(toggle,)
+  })
+  $(document).on('click','.dialog',function(e){
+      e.stopPropagation()
+    e.preventDefault()
+  })
+  $(document).on('click','.dialog-container',function(){
+
+    let dialog = $(this);
+    dialog.removeClass('open-dialog')
+  })
+  $(document).on('click','.close-dialog',function(){
+
+    let close = $(this);
+    let dialog = $(close.parent())
+    dialog.parent().removeClass('open-dialog')
+
+  })
+
+
+
+
 })()

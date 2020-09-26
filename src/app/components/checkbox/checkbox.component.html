@@ -1,0 +1,5 @@
+<label class="checkbox">
+
+  <div class="active" [ngClass]="{'no-active':!model[field]}"></div>
+  <input [name]="name" [(ngModel)]="model[field]"  class="checkbox-input" type="checkbox">
+</label>

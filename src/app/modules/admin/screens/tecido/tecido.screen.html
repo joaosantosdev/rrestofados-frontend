@@ -1,0 +1,99 @@
+<div class="content-main">
+
+  <div class="container-fluid">
+    <form #f="ngForm" (submit)="salvar()">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="cl-default-dark">{{title}}</h1>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-md-4 mb-2 align-items-start">
+          <input-content label="Nome" [error]="errors.nome">
+            <input name="nome" [(ngModel)]="tecido.nome" class="input">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2 align-items-start">
+          <input-content label="Descricao" [error]="errors.descricao">
+            <input name="descricao" [(ngModel)]="tecido.descricao"  class="input">
+          </input-content>
+        </div>
+        <div class="col-md-2 mb-2 d-flex align-items-start">
+          <button  type="submit" style="margin-top:27px;" class="button primary block">Salvar</button>
+        </div>
+        <div class="col-md-2 mb-2 d-flex align-items-start">
+          <button (click)="limpar()" type="button" style="margin-top:27px;" class="button primary block">Limpar</button>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-md-8 mb-2">
+        <input-content label="">
+          <input class="input" [(ngModel)]="paginator.search">
+        </input-content>
+      </div>
+
+
+      <div class="col-md-4 mb-2 d-flex align-items-end">
+        <button class="button primary block" (click)="pesquisar()">Pesquisar</button>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table">
+          <thead>
+          <th class="cl-default">Nome</th>
+          <th class="cl-default">Descrição</th>
+          <th class="cl-default">Opcoes</th>
+
+          </thead>
+          <tbody>
+          <tr *ngFor="let tecido of tecidos">
+            <td data-label="Nome" class="cl-default">{{tecido.nome}}</td>
+            <td data-label="Descricao" class="cl-default"> {{tecido.descricao}}</td>
+            <td data-label="Opcoes" class="cl-default">
+
+              <div class="row">
+                <div class="col-md-1 col-1">
+                  <icon (click)="edit(tecido)" name="edit" class=" c-pointer fill-default" size="23px"></icon>
+                </div>
+                <div class="col-md-1 col-1">
+                  <icon (click)="openDelete(tecido)" name="trash" class=" c-pointer fill-default" size="23px"></icon>
+                </div>
+              </div>
+            </td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <pagination [paginator]="paginator"  [change]="changePage"></pagination>
+
+  </div>
+
+</div>
+<modal-dialog alert="true" [ref]="dialog" [title]="dialog.title" name="tecidoSucesso">
+  <div class="row">
+    <div class="col-md-12">
+      <p>{{dialog.message}}</p>
+    </div>
+  </div>
+
+</modal-dialog>
+<modal-dialog classStyle="confirm" [ref]="dialogDelete" title="Atencao" name="clienteDelete">
+  <div class="row" style="margin-bottom: 0px!important;">
+    <div class="col-md-12 mb-2">
+      <p>Deseja realmente excluir este tecido ?</p>
+    </div>
+
+  </div>
+  <div class="row" style="margin-bottom: 0px!important;">
+    <div class="col-md-12">
+      <button (click)="deleteTecido()"  class="button success">Sim</button>
+      <button (click)="closeDelete()" class="button danger ml-2" >Não</button>
+    </div>
+  </div>
+</modal-dialog>

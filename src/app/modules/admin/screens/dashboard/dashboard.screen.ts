@@ -16,9 +16,9 @@ export class DashboardScreen implements OnInit {
     },
     {
       title: 'Clientes',
-      navigation: '/admin/cliente',
+      navigation: '/clientes',
       icon: 'cliente',
-   
+
     },
     {
       title: 'Servicos',
@@ -27,9 +27,26 @@ export class DashboardScreen implements OnInit {
       first: true
     },
     {
+      title: 'Fluxo de caixa',
+      navigation: 'servicos',
+      icon: 'fluxo_caixa',
+
+    },
+    {
+      title: 'Relatório',
+      navigation: 'servicos',
+      icon: 'relatorio',
+
+    },
+    {
       title: 'Tecidos',
-      navigation: 'tecido',
+      navigation: '/tecidos',
       icon: 'tecido'
+    },
+    {
+      title: 'Cores',
+      navigation: '/cores',
+      icon: 'cor'
     },
 
   ];

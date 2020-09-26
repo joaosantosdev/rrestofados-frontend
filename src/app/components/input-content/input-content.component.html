@@ -1,0 +1,7 @@
+<div [ngClass]="{error:error}" >
+  <div class="label" *ngIf="label !== null">{{label}} <span *ngIf="opcional" style="font-style: italic;font-family: RalewayMedium"> - Opcional</span></div>
+  <ng-content></ng-content>
+  <div *ngIf="error" class="text-error">
+    {{error}}
+  </div>
+</div>
