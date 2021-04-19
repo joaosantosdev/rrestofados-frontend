@@ -1,0 +1,119 @@
+<div class="content-main">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="cl-default-dark">Cores</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 mb-2">
+
+        <input-content label="Nome">
+          <input class="input" [(ngModel)]="search">
+        </input-content>
+      </div>
+      <div class="col-md-3 mb-2 d-flex align-items-end">
+        <button class="button primary block" (click)="pesquisar()">Pesquisar</button>
+      </div>
+      <div class="col-md-1 mb-2 d-flex align-items-end">
+        <button class="button primary block" (click)="dialogFiltros()">
+          <icon name="filter" size="22px" class="fill-white"></icon>
+        </button>
+      </div>
+      <div class="col-md-3 mb-2 d-flex align-items-end">
+        <button class="button primary block" (click)="clickNovaCor()">Nova</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table">
+          <thead>
+          <th class="cl-default">Nome</th>
+          <th class="cl-default">Descrição</th>
+          <th class="cl-default">Hexadecimal</th>
+          <th class="cl-default">Status</th>
+          <th class="cl-default">Opções</th>
+          </thead>
+          <tbody>
+          <tr [hidden]="(loading == false && listaCores.length > 0)">
+            <td colspan="6">
+              <div class="d-flex justify-content-center">
+                <loading message="Nenhuma cor encontrada"
+                         [showMessage]="loading == false && listaCores.length == 0"
+                         [status]="loading" size="80px"></loading>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let cor of listaCores">
+            <td class="cl-default" data-label="Nome">{{cor.nome}}</td>
+            <td class="cl-default" data-label="Descrição">{{cor.descricao}}</td>
+            <td class="cl-default" data-label="Hexadecimal">{{cor.hexadecimal}}</td>
+            <td class="cl-default" data-label="Status">{{cor.status | status}}</td>
+            <td class="cl-default" data-label="Opções">
+              <div class="row">
+                <div class="col-md-2 col-2">
+                  <icon (click)="editarCor(cor)" name="edit" class=" c-pointer fill-default" size="23px"></icon>
+                </div>
+                <div class="col-md-2 col-2">
+                  <icon (click)="excluirCor(cor)" name="trash" class=" c-pointer fill-default" size="23px"></icon>
+                </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <pagination [paginator]="paginator" (change)="changePage($event)"></pagination>
+
+  </div>
+
+</div>
+<modal-dialog [ref]="dlFiltros" title="Filtros" name="clienteDelete">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <input-content label="Nome">
+          <input class="input" [(ngModel)]="searchFields.nome">
+        </input-content>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <input-content label="Descrição">
+          <input class="input" [(ngModel)]="searchFields.descricao">
+        </input-content>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <input-content label="Hexadecimal">
+          <input class="input" [(ngModel)]="searchFields.hexadecimal">
+        </input-content>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <input-content label="Status">
+          <select-search
+            [options]="listaStatus"
+            [model]="searchFields.status"
+            field="descricao"
+            (change)="onChangeStatus($event)"
+            id="id"
+          >
+          </select-search>
+        </input-content>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <button class="button primary-dark block" (click)="pesquisarFiltros()">Pesquisar</button>
+      </div>
+      <div class="col-md-6 mb-2">
+        <button class="button default block" (click)="cleanFieldsSearch()">Limpar</button>
+      </div>
+    </div>
+  </div>
+
+</modal-dialog>

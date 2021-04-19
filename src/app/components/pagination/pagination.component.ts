@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'pagination',
@@ -6,35 +6,34 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent implements OnInit {
-@Input()
-paginator
+
   @Input()
-  change
-  constructor() { }
+  paginator;
+
+  @Output()
+  change = new EventEmitter();
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
-  getLabel(i){
-    return i+this.paginator.number;
-  }
-  getPage(){
-    return this.paginator.number+1
-  }
-  disable(page){
-    if(page > this.paginator.totalPages){
-      return true
+
+
+  next(): void {
+    if (this.paginator.page < this.totalPages) {
+      this.change.emit(this.paginator.page + 1);
     }
-    return false
-  }
-  changePage(page){
-  if(page < 0){
-    return;
   }
 
-  console.log(this.paginator.last )
-  if(this.paginator.last && page >= this.paginator.number){
-    return;
+  previous(): void {
+    if (this.paginator.page > 1) {
+      this.change.emit(this.paginator.page - 1);
+    }
   }
-    this.change(page)
+
+  get totalPages() {
+    return Math.ceil(this.paginator.totalCount / this.paginator.perPage);
   }
+
 }

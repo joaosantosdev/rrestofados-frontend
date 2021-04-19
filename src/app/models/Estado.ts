@@ -1,5 +1,5 @@
 export class Estado {
   public id;
-  public nome = "";
-  public sigla = "";
+  public nome = '';
+  public sigla = '';
 }

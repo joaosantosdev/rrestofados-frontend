@@ -1,104 +1,129 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Tecido} from '../../../../models/Tecido';
 import {TecidoService} from '../../../../services/TecidoService';
-import {ValidHelper} from '../../../../helpers/ValidHelper';
-import {Dialog} from '../../../../components/dialog/dialog';
-import {Paginator} from '../../../../models/Paginator';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Const} from '../../../../core/const';
+import {DialogAlert} from '../../../../core/dialog-alert';
 
 @Component({
   selector: 'app-tecido',
   templateUrl: './tecido.screen.html',
-  styleUrls: ['./tecido.screen.css']
+  styleUrls: []
 })
 export class TecidoScreen implements OnInit {
-
-  constructor(private tecidoService:TecidoService) { }
+  public listaStatus = Const.listaStatus;
   public isUpdate = false;
-  public tecido;
-  public tecidoDelete;
-  public errors: any;
-  public dialog = new Dialog();
-  public dialogDelete = new Dialog();
   public title = '';
-  public tecidos : Tecido[] = [];
-  public paginator = new Paginator();
-  limpar(){
-    this.title = 'Novo tecido';
-    this.errors = {nome:'',descricao:''};
-    this.tecido = new Tecido();
+  public loadingSave = false;
+  public loading = false;
 
+  public listaTecidos: any = [];
+  public form: FormGroup;
+
+  public search = '';
+
+  public paginator = {
+    page: 1,
+    perPage: 6,
+    totalCount: 0,
+
+  };
+
+  constructor(private tecidoService: TecidoService, private builder: FormBuilder) {}
+
+
+  cleanForm(tecido = null) {
+    this.title = 'Tecido';
+    this.form = this.builder.group({
+      id: [tecido ? tecido.id : null],
+      nome: [tecido ? tecido.nome : null, Validators.required],
+      descricao: [tecido ? tecido.descricao : null, Validators.required],
+      status: [tecido ? tecido.status : Const.status.ativo, Validators.required]
+    });
   }
+
   async ngOnInit() {
-    this.limpar();
+    this.cleanForm();
     await this.getTecidos();
   }
 
 
-async getTecidos(){
-    await  this.tecidoService.getTecidos(this.paginator).then(data=>{
-        this.paginator.map(data);
-        this.tecidos = data.response.content;
-    }).catch(data=>{
+  async getTecidos(params = {}) {
+    this.loading = true;
+    const response = await this.tecidoService.getTecidos({...this.paginator, ...params});
+    this.listaTecidos = response.data;
+    this.paginator.totalCount = response.totalCount;
+    this.loading = false;
+  }
 
-    })
-}
-
-   changePage = async (page) =>{
+  async changePage(page) {
     this.paginator.page = page;
     await this.getTecidos();
   }
 
-  openDelete(tecido){
-    this.dialogDelete.open();
-    this.tecidoDelete = tecido;
-  }
-  closeDelete(){
-    this.dialogDelete.close();
-  }
-  edit(tecido){
-    this.title='Editar tecido'
-    this.tecido = {...tecido};
-  }
-  async pesquisar(){
-    await this.getTecidos();
-  }
-  async deleteTecido(){
-    await  this.tecidoService.deleteTecido(this.tecidoDelete.id).then(async data=>{
-      this.paginator = new Paginator();
-      await this.getTecidos();
-    }).catch(data=>{
 
-    })
+  edit(tecido) {
+    this.cleanForm(tecido);
+    this.title = 'Atualização de tecido';
   }
-  async salvar(){
-    this.errors = {
-      nome: !this.tecido.nome?"Nome é obrigatório": false,
-      descricao: !this.tecido.descricao?"Descricao é obrigatório": false
 
+  async delete(tecido) {
+    if (this.form.controls.id.value) {
+      return;
     }
-    if(ValidHelper.isOk(this.errors)){
-      const success = async (data) =>{
-        this.dialog.title = 'Sucesso'
-        this.dialog.message = data.response;
-        this.dialog.open();
-        this.limpar();
-        this.paginator = new Paginator();
-        await this.getTecidos();
-      };
-      const error = (data)=>{
-        this.dialog.title = 'Erro'
-        this.dialog.message = data.error;
-        this.dialog.open();
-      };
-      if(this.tecido.id){
-        await this.tecidoService.updateTecido(this.tecido.id,this.tecido).then(async data=>await success(data)).catch(data=> error(data))
+    this.cleanForm();
+    const response = await DialogAlert.confirm({message: 'Deseja realmente excluir esse tecido?'});
+    if (response) {
+      tecido.status = Const.status.excluido;
+      await this.tecidoService.updateTecido(tecido.id, tecido).then(data => {
+        DialogAlert.info({message: 'Tecido excluído com sucesso.'});
+        this.getTecidos();
+      });
+    }
+  }
 
-      }else{
-        await this.tecidoService.saveTecido(this.tecido).then(async data=>await success(data)).catch(data=> error(data))
+  async pesquisar() {
+    await this.getTecidos({
+      search: JSON.stringify({
+          nome: this.search
+      })});
+  }
 
+  async salvar() {
+    if (this.loadingSave) {
+      return;
+    }
+    if (this.form.valid) {
+      const json = this.form.value;
+      this.loadingSave = true;
+      if (json.id) {
+        await this.tecidoService.updateTecido(json.id, json).then(response => {
+          DialogAlert.success({message: 'Tecido atualizado com sucesso.'});
+        });
+      } else {
+        delete json.id;
+        await this.tecidoService.saveTecido(json).then(response => {
+          DialogAlert.success({message: 'Tecido cadastrado com sucesso.'});
+        });
       }
+      this.loadingSave = false;
+      this.cleanForm();
+      await this.getTecidos();
+      this.search = '';
+    } else {
+      Object.keys(this.form.controls).map(key => {
+        this.form.controls[key].markAsTouched();
+        this.form.controls[key].markAsDirty();
+      });
     }
 
   }
 
+  getControl(name) {
+    return this.form ? this.form.get(name) : null;
+  }
+
+  onChangeStatus(value) {
+    this.form.controls.status.setValue(value);
+  }
 }

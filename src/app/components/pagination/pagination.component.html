@@ -2,12 +2,15 @@
   <div class="col-md-12 justify-content-center align-items-center d-flex">
     <nav aria-label="Page navigation example">
       <ul class="pagination">
-
-        <li (click)="changePage(paginator.number-1)" [ngClass]="{disabled:paginator.first}" class="page-item c-pointer"><a class="page-link"  >Anterior</a></li>
-        <li (click)="changePage(getLabel(0))" class="page-item c-pointer" [ngClass]="{active:getPage() == getLabel(1),disabled: disable(getLabel(1))}"><a class="page-link" >{{getLabel(1)}}</a></li>
-        <li (click)="changePage(getLabel(1))" class="page-item c-pointer" [ngClass]="{active:getPage() == getLabel(2),disabled: disable(getLabel(2)) }"><a class="page-link" >{{getLabel(2)}}</a></li>
-        <li (click)="changePage(getLabel(2))" class="page-item c-pointer" [ngClass]="{active:getPage() == getLabel(3),disabled:disable(getLabel(3))}"><a class="page-link" >{{getLabel(3)}}</a></li>
-        <li  (click)="changePage(paginator.number+1)"  [ngClass]="{disabled:paginator.last}" class="page-item c-pointer" ><a class="page-link" >Proximo</a></li>
+        <li (click)="previous()" [ngClass]="{disabled:paginator.page  == 1}" class="page-item c-pointer">
+          <div class="page-link">Anterior</div>
+        </li>
+        <li class="page-item c-pointer">
+          <div class="page-link">{{paginator.page}}</div>
+        </li>
+        <li (click)="next()" [ngClass]="{disabled:paginator.page === totalPages}" class="page-item c-pointer">
+          <div class="page-link">Próxima </div>
+        </li>
       </ul>
     </nav>
   </div>

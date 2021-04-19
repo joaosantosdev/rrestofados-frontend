@@ -1,0 +1,23 @@
+
+<div class="content-select-search">
+    <div class="group left ">
+        <input class="input input-search"
+        (click)="open()"
+
+        (keyup)="onSearch($event)"
+        [(ngModel)]="search"
+               id="search">
+
+        <div    (click)="toggle($event)" class="input-text input-text-select-search toggle-dialog c-pointer">
+            <icon (click)="toggle($event)"  name="arrow_dropdown" class="fill-default-dark icon-select-search" size="13px"></icon>
+        </div>
+      </div>
+    <div class="container-options">
+        <div class="content-options" *ngIf="isOpen">
+            <div class="option" *ngFor="let option of getOptions()"
+            (click)="onChange(option)">{{option[field]}}</div>
+        </div>
+    </div>
+
+</div>
+

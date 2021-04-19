@@ -1,0 +1,271 @@
+<form [formGroup]="form" (submit)="salvar()">
+  <div class="content-main">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="cl-default-dark">{{title}}</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <input-content label="Cliente" [control]="getControl('clienteId')">
+            <input-dialog (click)="openDialogClient()" [value]="seletedClient.nome">
+            </input-dialog>
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Data" [control]="getControl('data')">
+            <input class="input" type="date" formControlName="data">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Status" [control]="getControl('status')">
+            <select-search
+              [options]="listaStatus"
+              field="descricao"
+              [model]="form.controls['status'].value"
+              id="id"
+            >
+            </select-search>
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <input-content label="Data da Entrega" [control]="getControl('dataEntrega')">
+            <input class="input" type="date" formControlName="dataEntrega">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Tecido" [control]="getControl('tecidoId')">
+            <select-search
+              [id]="'id'"
+              [options]="listaTecidos"
+              field="descricao"
+              (changeValue)="onChangeTecido($event)"
+              [model]="getControl('tecidoId').value"
+            >
+            </select-search>
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Cor" [control]="getControl('corId')">
+            <select-search
+              [id]="'id'"
+              [options]="listaCores"
+              field="descricao"
+              (changeValue)="onChangeCor($event)"
+              [model]="getControl('corId').value"
+            >
+            </select-search>
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <input-content label="Descrição" [control]="getControl('descricao')">
+            <textarea class="input" formControlName="descricao"></textarea>
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="subheader">Endereço de Entrega</h2>
+        </div>
+      </div>
+      <div [formGroup]="formEndereco">
+        <div class="row">
+          <div class="col-md-4">
+            <input-content label="Estado" [control]="getControlEndereco('estadoId')">
+              <select-search
+                [id]="'id'"
+                [options]="listaEstados"
+                field="nome"
+                [model]="getControlEndereco('estadoId').value"
+                (changeValue)="onChangeEstado($event)"
+              >
+              </select-search>
+            </input-content>
+          </div>
+          <div class="col-md-4">
+            <input-content label="Municipio" [control]="getControlEndereco('municipioId')">
+              <select-search
+                [id]="'id'"
+                [options]="listaMunicipios"
+                field="nome"
+                [model]="getControlEndereco('municipioId').value"
+                (changeValue)="onChangeMunicipio($event)"
+
+              >
+              </select-search>
+            </input-content>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input-content label="CEP" [control]="getControlEndereco('cep')">
+              <input class="input" formControlName="cep">
+            </input-content>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-2">
+            <input-content label="Bairro" [control]="getControlEndereco('bairro')">
+              <input class="input" formControlName="bairro">
+            </input-content>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input-content label="Rua" [control]="getControlEndereco('rua')">
+              <input class="input" formControlName="rua">
+            </input-content>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input-content label="Número" [control]="getControlEndereco('numero')">
+              <input class="input" formControlName="numero">
+            </input-content>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-2">
+            <input-content label="Complemnto" opcional="true" [control]="getControlEndereco('complemento')">
+              <input class="input" formControlName="complemento">
+            </input-content>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="subheader">Pagamento</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 mb-2" [formGroup]="formPagamento">
+          <input-content label="Subtotal">
+            <input class="input"
+                   currencyMask
+                   (keyup)="changeValorTotal()"
+                   formControlName="subtotal"
+
+                   [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+          </input-content>
+        </div>
+        <div class="col-md-3 mb-2">
+          <input-content label="Valor Frete">
+            <input class="input" formControlName="valorFrete" currencyMask
+                   (keyup)="changeValorTotal()"
+                   [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+          </input-content>
+        </div>
+        <div class="col-md-2 mb-2" [formGroup]="formPagamento">
+          <input-content label="Parcelas">
+            <input class="input"
+                   min="1"
+                   type="number"
+                   formControlName="parcelas"
+                   (change)="changeParcelas($event)"
+            >
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2" [formGroup]="formPagamento">
+          <input-content label="Valor Total">
+            <input class="input disabled"
+                   formControlName="valorTotal"
+                   disabled currencyMask
+                   [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+          </input-content>
+        </div>
+      </div>
+      <div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">Valor</label>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Forma de pagamento</label>
+          </div>
+          <div class="col-md-2">
+            <div class="label">
+              Pago
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngFor="let group of pagamentosArray.controls;let i = index" [formGroup]="group">
+          <div class="col-md-4 mb-2">
+            <input-content label="" [control]="group.get('valor')">
+              <input class="input" currencyMask formControlName="valor"
+                     [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+            </input-content>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input-content label="" [control]="group.get('formaPagamentoId')">
+              <select-search
+                [id]="'id'"
+                [options]="listaTecidos"
+                field="descricao"
+                [model]="group.get('formaPagamentoId').value"
+                (changeValue)="onChangeFormaPagamento($event, group)"
+              >
+              </select-search>
+            </input-content>
+          </div>
+          <div class="col-md-2 mb-2">
+            <checkbox [value]="group.get('pago').value"
+                      (onChange)="onChangePago($event,group)">
+            </checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <button type="submit" class="button  btn-block primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<modal-dialog title="Clientes" [ref]="ctlDlCliente">
+  <div class="">
+    <div class="row">
+      <div class="col-md-8">
+        <input class="input" placeholder="Pesquisar">
+      </div>
+      <div class="col-md-4">
+        <button class="button primary block">Pesquisar</button>
+      </div>
+    </div>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+            <th class="cl-default">Nome</th>
+            <th class="cl-default">E-mail</th>
+            <th class="cl-default">CPF</th>
+            </thead>
+            <tbody>
+            <tr [hidden]="(loadingClient == false && listaClientes.length > 0)">
+              <td colspan="6">
+                <div class="d-flex justify-content-center">
+                  <loading message="Nenhum cliente encontrado"
+                           [showMessage]="loadingClient == false && listaClientes.length == 0"
+                           [status]="loadingClient" size="80px"></loading>
+                </div>
+              </td>
+            </tr>
+            <tr *ngFor="let client of listaClientes" class="c-pointer" (click)="clickClient(client)">
+              <td data-label="Nome">{{client.nome}}</td>
+              <td data-label="E-mail">{{client.email}}</td>
+              <td data-label="CPF">{{client.cpf}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <pagination [paginator]="paginator"
+                (change)="changePageClient($event)"></pagination>
+  </div>
+</modal-dialog>
+
+
+
+

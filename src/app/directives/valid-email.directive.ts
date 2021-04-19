@@ -3,7 +3,7 @@ import {ValidHelper} from '../helpers/ValidHelper';
 
 @Directive(
   {
-    selector:'[valid-email]'
+    selector: '[valid-email]'
   }
 )
 export class ValidEmailDirective {

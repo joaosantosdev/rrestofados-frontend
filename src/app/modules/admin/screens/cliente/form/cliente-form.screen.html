@@ -1,0 +1,148 @@
+<form [formGroup]="form"  (submit)="salvar()">
+  <div class="content-main">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="cl-default-dark">{{title}}</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <input-content label="Nome" [control]="getControl('nome')">
+            <input formControlName="nome" name="nome" class="input" (click)="teste()">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content  label="E-mail" [control]="getControl('email')">
+            <input formControlName="email" name="email" valid-email class="input">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Status">
+            <select-search
+              [options]="listaStatus"
+              [model]="form.controls['status'].value"
+              field="descricao"
+              (changeValue)="onChangeStatus($event)"
+              id="id"
+            >
+            </select-search>
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <input-content  label="CPF" [control]="getControl('cpf')" opcional="true">
+            <input formControlName="cpf" name="cpf" class="input" maxlength="11">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Estados" [control]="getControlEndereco('estadoId')">
+            <select-search
+              [options]="listaEstados"
+              [model]="form.controls.endereco.get('estadoId').value"
+              field="nome"
+              (changeValue)="onChangeEstado($event)"
+              [id]="'id'"
+            >
+            </select-search>
+          </input-content>
+
+
+        </div>
+        <div class="col-md-4 mb-2">
+          <input-content label="Municípios"  [control]="getControlEndereco('municipioId')">
+            <select-search
+              [options]="listaMunicipios"
+              [model]="getControlEndereco('municipioId').value"
+              field="nome"
+              [id]="'id'"
+              (changeValue)="onChangeMunicipio($event)"
+            >
+            </select-search>
+          </input-content>
+
+
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2" formGroupName="endereco" >
+          <input-content  label="CEP" opcional="true" [control]="getControlEndereco('cep')">
+            <input mask-cep name="cep" formControlName="cep" class="input"/>
+          </input-content>
+        </div>
+        <div class="col-md-8 mb-2" formGroupName="endereco">
+          <input-content  label="Bairro" [control]="getControlEndereco('bairro')">
+            <input name="bairro" formControlName="bairro" class="input">
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2" formGroupName="endereco">
+          <input-content  label="Rua" [control]="getControlEndereco('rua')">
+            <input name="rua" formControlName="rua" class="input">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2" formGroupName="endereco">
+          <input-content label="Número" [control]="getControlEndereco('numero')">
+            <input name="numero" formControlName="numero" class="input">
+          </input-content>
+        </div>
+        <div class="col-md-4 mb-2" formGroupName="endereco">
+          <input-content label="Complemento" opcional="true" [control]="getControlEndereco('complemento')">
+            <input name="complemento" formControlName="complemento" class="input">
+          </input-content>
+        </div>
+      </div>
+
+      <div class="row"  *ngFor="let group of telefonesArray.controls;let i = index" [formGroup]="group">
+        <div class="col-md-3 mb-2">
+          <input-content  label="Telefone" [control]="group.get('numero')">
+            <input  class="input" formControlName="numero">
+          </input-content>
+        </div>
+        <div class="col-md-3 mb-2">
+          <input-content  label="Descrição" [control]="group.get('descricao')">
+            <input  class="input" formControlName="descricao">
+          </input-content>
+        </div>
+        <div class="col-md-2 mb-2">
+          <div class="label">
+            Whatsapp
+          </div>
+          <checkbox [value]="group.get('whatsapp').value"
+                    (onChange)="onChangeWhatsapp($event,group)">
+          </checkbox>
+        </div>
+        <div class="col-md-4 mb-2 d-flex align-items-end ">
+
+          <button type="button"
+                  *ngIf="telefonesArray.controls.length > 1"
+                  (click)="removeTelefone(i)"
+                  style="margin-right:10px;height: 40px;width: 40px"
+                  class="button default-dark d-flex justify-content-center align-items-center"
+                  >
+            <icon name="trash" size="20px" class="fill-white"></icon>
+          </button>
+          <button type="button"
+                  *ngIf="telefonesArray.controls.length-1 === i"
+                  (click)="addTelefone()"
+                  style="height: 40px;width: 40px"
+                  class="button default-dark d-flex justify-content-center align-items-center">
+            <icon name="plus" size="20px" class="fill-white"></icon>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <button type="submit" class="button  btn-block primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+

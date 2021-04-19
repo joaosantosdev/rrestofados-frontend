@@ -1,7 +1,7 @@
-<div [ngClass]="{error:error}" >
+<div [ngClass]="{error:getControl().errors && getControl().dirty}" >
   <div class="label" *ngIf="label !== null">{{label}} <span *ngIf="opcional" style="font-style: italic;font-family: RalewayMedium"> - Opcional</span></div>
   <ng-content></ng-content>
-  <div *ngIf="error" class="text-error">
-    {{error}}
+  <div *ngIf="getControl().errors && getControl().dirty" class="text-error">
+    {{getError()}}
   </div>
 </div>

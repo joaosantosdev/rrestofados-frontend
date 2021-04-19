@@ -1,0 +1,54 @@
+
+<div class="content-main">
+  <div class="container-fluid">
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="row mt-2 mb-2">
+        <div class="col-md-12 d-flex flex-column align-items-center">
+          <img [src]="foto?foto:'../../../../../assets/imgs/perfil_default.svg'" style="width: 130px;height: 130px;border-radius: 100%">
+
+          <div class="row">
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+              <label class="button bg-default-dark mt-3 " >
+                Selecionar
+                <input type="file" class="d-none"   (change)="changeFoto($event)" accept="jpg,png">
+              </label>
+            </div>
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+              <button type="button" class="button bg-danger mt-3" (click)="removerFoto()">Remover</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input-content label="Nome" [control]="getControl('nome')">
+            <input type="text" class="input" formControlName="nome">
+          </input-content>
+        </div>
+        <div class="col-md-6 mb-2">
+          <input-content label="Email" [control]="getControl('email')">
+            <input type="email" class="input" name="email" formControlName="email">
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input-content label="Senha" [control]="getControl('senha')">
+            <input type="password" class="input" name="senha" formControlName="senha">
+          </input-content>
+        </div>
+        <div class="col-md-6 mb-2">
+          <input-content label="Confirmar senha" [control]="getControl('r_senha')">
+            <input type="password" class="input" name="r_senha" formControlName="r_senha">
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <button type="submit" class="button primary block" [disabled]="loading">{{loading?'Salvando...':'Salvar'}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

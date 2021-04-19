@@ -1,8 +1,113 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+.content-white{
+  display: flex;
+  flex: 1;
+  background-color: var(--white);
+  border-radius: var(--radius);
+  flex-direction: column;
+}
 .content-main{
-   
-    background: white;
-    margin: 10px;
-    border-radius: 10px;
-    padding: 10px;
+  flex: 1;
+
+
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
   }
+
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.content-select-search{
+  display: flex;
+  flex-direction: column;
+}
+
+.swal2-modal {
+  padding:0px!important;
+}
+
+.swal2-modal  .swal2-content{
+  padding:0!important;
+}
+
+.dialog-alert{
+  padding:10px;
+}
+
+.dialog-alert .footer{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.dialog-alert .title{
+  text-align: left;
+  font-family: RalewaySemiBold;
+}
+
+.dialog-alert .text-message{
+  min-height: 90px;
+  text-align: left;
+  padding-top: 10px;
+}
+
+.dialog-alert .btn-ok{
+  border: 0;
+  outline: none;
+  border-radius: var(--radius);
+  padding: 7px;
+  min-width: 58px;
+  background: var(--primary-dark);
+  color: var(--white);
+}
+
+.dialog-alert .header{
+  display: flex;
+    justify-content: space-between;
+}
+
+.dialog-alert .icon-close{
+  width: 24px;
+  height: 24px;
+  background-color: var(--primary-dark);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:2px;
+color:var(--white);
+border-radius: 100%;
+}
+.dialog-alert .btn-cancel{
+  margin-left: 10px;
+  border: 0;
+  outline: none;
+  border-radius: var(--radius);
+  padding: 7px;
+  min-width: 58px;
+  background: var(--primary-dark);
+  color: var(--white);
+}
+.content-dashboard:nth-child(1){
+  display:none!important;
+}

@@ -1,4 +1,7 @@
+[cliente-list]{
+  display: flex;
+  flex: 1;
+}
 .telefone-list{
   border-bottom: 1px solid var(--content);
-
 }

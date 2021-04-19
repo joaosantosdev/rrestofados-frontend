@@ -1,1 +1,42 @@
-<h1>Login</h1>
+<div class="container-login">
+  <div class="content-login">
+    <div class="panel-left justify-content-center align-items-center ">
+      <img src="./assets/imgs/login.jpg" class="img-login"/>
+
+    </div>
+
+    <form class="panel-right"[formGroup]="usuario" (ngSubmit)="entrar()">
+      <div class="row block">
+        <div class="col-12">
+          <input-content label="Email" [control]="this.usuario.get('email')"  >
+            <input class="input" type="email" formControlName="email" name="email">
+          </input-content>
+        </div>
+      </div>
+      <div class="row block">
+        <div class="col-12">
+          <input-content label="Senha" [control]="this.usuario.get('senha')" >
+            <input class="input" type="password" formControlName="senha" name="senha">
+          </input-content>
+        </div>
+      </div>
+      <div class="row block">
+        <div class="col-12">
+          <button class="button primary-dark block" >Entrar</button>
+        </div>
+      </div>
+      <div class="row" *ngIf="error">
+        <div class="col-12 text-error">
+          {{error}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a class="a cl-secondary-dark">Esqueceu sua senha ?</a>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+</div>

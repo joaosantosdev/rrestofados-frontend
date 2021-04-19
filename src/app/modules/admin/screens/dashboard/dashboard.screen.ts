@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {DashboardState} from './state';
+import {environment} from '../../../../../environments/environment';
+import {Utils} from '../../../../core/utils';
+
 
 @Component({
   selector: 'admin-dashboard',
@@ -8,11 +12,17 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardScreen implements OnInit {
 
   itemsSidebar = [
+
     {
-      title: 'Perfil',
-      navigation: 'perfil',
+      title: 'Home',
+      navigation: '/',
       icon: 'perfil',
       first: true
+    },
+    {
+      title: 'Perfil',
+      navigation: '/perfil',
+      icon: 'perfil',
     },
     {
       title: 'Clientes',
@@ -21,22 +31,14 @@ export class DashboardScreen implements OnInit {
 
     },
     {
-      title: 'Servicos',
-      navigation: 'servicos',
+      title: 'Serviços',
+      navigation: '/servicos',
       icon: 'servico',
-      first: true
     },
     {
-      title: 'Fluxo de caixa',
-      navigation: 'servicos',
-      icon: 'fluxo_caixa',
-
-    },
-    {
-      title: 'Relatório',
-      navigation: 'servicos',
-      icon: 'relatorio',
-
+      title: 'Formas de pagamento',
+      navigation: '/forma/pagamento',
+      icon: 'forma_pagamento'
     },
     {
       title: 'Tecidos',
@@ -51,8 +53,14 @@ export class DashboardScreen implements OnInit {
 
   ];
   constructor() { }
-
+  get usuario(): any{
+    return DashboardState.getUsuario();
+  }
   ngOnInit(): void {
+  }
+
+  get urlImage(){
+      return Utils.geUserImageUrl(this.usuario.fotoPath)
   }
 
 }

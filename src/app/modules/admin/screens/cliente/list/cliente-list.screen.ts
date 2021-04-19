@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {ClienteService} from '../../../../../services/ClienteService';
+import {Component, OnInit} from '@angular/core';
+import {ClientService} from '../../../../../services/ClientService';
 import {Router} from '@angular/router';
-import {Dialog} from '../../../../../components/dialog/dialog';
 import {Cliente} from '../../../../../models/Cliente';
+import {DialogAlert} from '../../../../../core/dialog-alert';
 
 @Component({
   selector: 'cliente-list',
@@ -10,87 +10,61 @@ import {Cliente} from '../../../../../models/Cliente';
   styleUrls: ['./cliente-list.screen.css']
 })
 export class ClienteListScreen implements OnInit {
-  public loading : boolean = false;
-  public clientes = [];
-  public paginacao:any = {
-    page:0,
-    size:10,
-    number:0,
-    search:""
-  }
+  public loading = false;
+  title = 'sad';
+  public searchText = '';
+  public clients = [];
+  public pagination: any = {
+    page: 1,
+    perPage: 5,
+    count: 0,
+    totalCount:0
+  };
   public cliente = new Cliente();
-  public dialogExcluir= new Dialog();
-  public dialogConfirmar = new Dialog();
-  public dialogEndereco  = new Dialog();
-  public dialogTelefone  = new Dialog();
 
   public clienteRemovido = null;
-  constructor(public service: ClienteService,public router:Router) {
+
+  constructor(public service: ClientService, public router: Router) {
 
   }
 
 
-
-async  ngOnInit() {
-  this.getClientes()
-
-  }
-
-  public async getClientes(){
+  async getClients(): Promise<void> {
+    this.clients = [];
     this.loading = true;
-
-    await  this.service.getClientes(this.paginacao).then(data=>{
-      this.paginacao.size = data.response.size;
-      this.paginacao.last = data.response.last;
-      this.paginacao.first = data.response.first;
-      this.paginacao.number = data.response.number;
-      this.paginacao.totalPages = data.response.totalPages;
-
-      this.clientes =  data.response.content;
-      this.loading = false;
-  }) ;
-
+    const response = await this.service.getClients(this.pagination);
+    this.clients = response.data;
+    this.pagination.count = response.count;
+    this.pagination.totalCount = response.totalCount;
+    this.loading = false;
   }
 
 
-
-   changePage = (page) =>{
-    this.paginacao.page = page;
-    this.getClientes()
+  async ngOnInit() {
+    this.getClients();
   }
 
-  pesquisar(){
-    this.paginacao.page = 0;
-    this.getClientes()
+  public async getClientes() {
+    this.loading = true;
   }
 
+  changePage = (page) => {
+    this.pagination.page = page;
+    this.getClients();
+  };
 
-  openDelete(cliente){
-    this.dialogExcluir.open();
-    this.clienteRemovido = cliente;
-  }
-  closeDelete(){
-    this.dialogExcluir.close();
-  }
-  async deleteCliente(){
-    await this.service.deleteCliente(this.clienteRemovido.id).then(async res=>{
-        this.dialogExcluir.close()
-        await this.getClientes()
-        this.dialogConfirmar.open();
-    }).catch(err=>{
-
-    })
-  }
-  openDialogEndereco(cliente){
-    this.cliente = cliente;
-    this.dialogEndereco.open();
+  pesquisar() {
+    this.pagination.page = 1;
+    this.getClients();
   }
 
-
-  openDialogTelefone(cliente){
-    this.cliente = cliente;
-    console.log(cliente,"cliente")
-    this.dialogTelefone.open();
+  async deleteClient(id): Promise<void> {
+    if (await DialogAlert.confirm({message: 'Deseja realmete excluir esse cliente?'})) {
+        await this.service.deleteClientById(id).then(response => {
+            DialogAlert.info({message: 'Cliente removido com sucesso.'});
+            this.getClients();
+      });
+    }
   }
 
 }

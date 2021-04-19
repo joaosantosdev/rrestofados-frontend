@@ -1,0 +1,33 @@
+.content-options{
+    max-height: 140px;
+    background: #fff;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius);
+    padding: 5px 0px 5px 0px;
+    margin-top: 2px;
+    box-shadow: var(--shadow);
+    -webkit-box-shadow: 0px 3px 5px 0px rgba(184,184,184,1);
+-moz-box-shadow: 0px 3px 5px 0px rgba(184,184,184,1);
+box-shadow: 0px 3px 5px 0px rgba(184,184,184,1);
+overflow: auto;
+position: absolute;
+
+    width: 100%;
+    z-index: 100000;
+}
+.container-options{
+  padding-right: 15px;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+.option{
+    padding: 10px;
+    cursor: pointer;
+}
+
+.option:hover{
+    background-color: var(--content);
+}

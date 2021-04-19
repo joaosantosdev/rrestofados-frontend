@@ -1,42 +1,36 @@
 import {Injectable} from '@angular/core';
 import {Service} from './Service';
 import {UrlHelper} from '../helpers/UrlHelper';
-import {HttpClient} from '@angular/common/http';
+import {DialogAlert} from '../core/dialog-alert';
 
 @Injectable()
-export class TecidoService{
-  public url = 'v1/tecidos'
-  constructor(private service:Service) {
+export class TecidoService {
+  public url = '/tecidos';
+
+  constructor(private service: Service) {
 
   }
-  public async getTecidos(params = {}) : Promise<any>{
-    let url = (this.url+UrlHelper.formatParams(params));
-    return await this.service.get(url).then(response=>response).catch(err=>{
-      return Promise.reject('Erro'+err)
-    })
+
+  public handlerError(error) {
+    DialogAlert.error({message: error.error});
+    return Promise.reject(error.error);
   }
-  public async saveTecido(body) : Promise<any>{
-    let url = (this.url);
-    return await this.service.post(url,body).then(response=>response).catch(err=>{
-      return Promise.reject('Erro'+err)
-    })
+
+  public async getTecidos(params = {}): Promise<any> {
+    const url = (this.url + UrlHelper.formatParams(params));
+    return await this.service.getSecurity(url).then(response => response).catch(this.handlerError);
   }
-  public async updateTecido(id,body) : Promise<any>{
-    let url = (this.url+`/${id}`);
-    return await this.service.put(url,body).then(response=>response).catch(err=>{
-      return Promise.reject('Erro'+err)
-    })
+
+  public async getTecidosAll(): Promise<any> {
+    return await this.service.getSecurity(`${this.url}/all`).then(response => response).catch(this.handlerError);
   }
-  public async getCliente(id) : Promise<any>{
-    let url = (this.url+`/${id}`);
-    return await this.service.get(url).then(response=>response).catch(err=>{
-      return Promise.reject('Erro'+err)
-    })
+  public async saveTecido(body): Promise<any> {
+    const url = (this.url);
+    return await this.service.postSecurity(url, body).then(response => response).catch(this.handlerError);
   }
-  public async deleteTecido(id) : Promise<any>{
-    let url = (this.url+`/${id}`);
-    return await this.service.delete(url).then(response=>response).catch(err=>{
-      return Promise.reject('Erro'+err)
-    })
+
+  public async updateTecido(id, body): Promise<any> {
+    const url = (this.url + `/${id}`);
+    return await this.service.putSecurity(url, body).then(response => response).catch(this.handlerError);
   }
 }

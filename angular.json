@@ -27,17 +27,14 @@
             "styles": [
               "src/styles.css",
               "src/assets/css/bootstrap.css",
-
+              "node_modules/sweetalert2/src/sweetalert2.scss",
               "src/assets/css/lib.css"
             ],
             "scripts": [
               "src/assets/js/jquery.js",
               "src/assets/js/sidebar.js",
               "src/assets/js/popover.js",
-
               "src/assets/js/bootstrap.js"
-
-
             ]
           },
           "configurations": {

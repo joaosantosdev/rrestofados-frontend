@@ -9,8 +9,8 @@ export class LoadingComponent implements OnInit {
 
   @Input() bg;
   @Input() size;
-  @Input() status:boolean;
-  @Input() showMessage:boolean;
+  @Input() status: boolean;
+  @Input() showMessage: boolean;
   @Input() message;
 
   constructor() { }
@@ -19,13 +19,13 @@ export class LoadingComponent implements OnInit {
   }
 
   getStyle(){
-    let style = "";
-    if(this.bg){
-      style += "border-color: "+this.bg+" transparent transparent transparent;";
+    let style = '';
+    if (this.bg){
+      style += 'border-color: ' + this.bg + ' transparent transparent transparent;';
     }
-    style += "height:"+this.size+";width:"+this.size+"";
+    style += 'height:' + this.size + ';width:' + this.size + '';
     return style;
   }
 
- 
+
 }

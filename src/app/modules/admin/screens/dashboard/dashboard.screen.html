@@ -1,69 +1,63 @@
 <div>
-    <div class="loading ">
+  <div class="loading ">
 
 
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+
+  </div>
+  <div id="container-main" class="container-main">
+
+    <div id="sidebar">
+      <div class="content-user-img">
+        <img [src]="urlImage" style="width: 130px;height: 130px;border-radius: 100%">
+
       </div>
 
+      <div class="content-user-info">
+        <h4>{{usuario.nome}}</h4>
+        <p>{{usuario.email}}</p>
+      </div>
+
+      <div class="items-sidebar">
+        <a *ngFor="let item of itemsSidebar" class='cl-default a item-sidebar outline-none link-navigation'
+           routerLinkActive="active-primary" routerLink="{{item.navigation}}">
+          <icon size="25px" name="{{item.icon}}" routerLinkActive="active-primary" class="fill-default"></icon>
+          <div class="item-sidebar-title">{{item.title}}</div>
+        </a>
+      </div>
+    </div>
+
+    <div id="content-dashboard-black" class="toggle-sidebar">
 
     </div>
-    <div id="container-main" class="container-main">
+    <div class="container-dashboard " id="container-dashboard">
 
-      <div id="sidebar">
-
-        <div class="content-user-img">
-
-        </div>
-
-        <div class="content-user-info">
-          <h4>Jair Bolsonaro</h4>
-          <p>melhorpresidente@gmail.com</p>
-        </div>
-
-        <div class="items-sidebar">
-           <a *ngFor="let item of itemsSidebar" class='cl-default a item-sidebar outline-none link-navigation' routerLinkActive="active-primary" routerLink="{{item.navigation}}">
-
-
-                <icon size="25px" name="{{item.icon}}" routerLinkActive="active-primary" class="fill-default"></icon>
-
-              <div class="item-sidebar-title">{{item.title}}</div>
-
-            </a>
+      <div class="navbar bg-primary-dark" >
+        <img class="logo" src="assets/imgs/logo.png">
+        <div class="c-pointer  toggle-sidebar toggle-mobile">
+          <icon name="menu" size="40px" class="fill-white"></icon>
         </div>
       </div>
 
-      <div id="content-dashboard-black" class="toggle-sidebar">
 
-      </div>
-      <div class="container-dashboard " id="container-dashboard">
-        <div class="navbar bg-primary-dark" style="position: fixed;">
-          <img class="logo" src="assets/imgs/logo.png">
-            <div class="c-pointer  toggle-sidebar toggle-mobile">
-              <icon name="menu" size="40px" class="fill-white"></icon>
+      <div class="content-dashboard ">
 
-            </div>
-        </div>
-        <div class="content-dashboard ">
-
-
-
-
+        <div class="content-white">
           <router-outlet></router-outlet>
-
-
-
-
-          </div>
-
+        </div>
 
       </div>
+
     </div>
   </div>
+</div>

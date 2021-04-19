@@ -1,19 +1,15 @@
 
 <div class="dialog-container" [id]="name">
   <div class="dialog"   [ngClass]="[getClass(),getAlert()]">
-    <div class="close-dialog">
-      <icon name="close" size="15px"></icon>
-    </div>
-    <div class="container-fluid">
-      <div class="row ">
-        <div class="col-md-12">
-          <h4 class="dialog-title">{{title}}</h4>
-        </div>
+    <div class="r1">
+      <h4 class="dialog-title">{{title}}</h4>
+      <div class="close-dialog" (click)="close()">
+        <icon name="close" size="15px"></icon>
       </div>
     </div>
+   
     <div class="container-fluid">
       <ng-content></ng-content>
-
     </div>
   </div>
 </div>

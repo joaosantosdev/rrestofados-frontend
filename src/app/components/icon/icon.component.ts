@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class IconComponent implements OnInit {
 
   @Input() name: String;
-  @Input() class : String;
+  @Input() class: String;
 
   @Input() size: String;
 
@@ -18,7 +18,7 @@ export class IconComponent implements OnInit {
   }
 
   getSize(){
-    return "height:"+this.size+";width:"+this.size+";"
+    return 'height:' + this.size + ';width:' + this.size + ';';
   }
 
 }

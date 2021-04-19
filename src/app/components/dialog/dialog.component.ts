@@ -22,22 +22,21 @@ export class DialogComponent implements OnInit {
 
 
   getClass(){
-    console.log(this.classStyle)
-    return this.classStyle?this.classStyle:'';
+    return this.classStyle ? this.classStyle : '';
   }
 
   close = () => {
-    document.getElementById(this.name).classList.remove('open-dialog')
+    document.getElementById(this.name).classList.remove('open-dialog');
   }
   open = () => {
-    document.getElementById(this.name).classList.add('open-dialog')
+    document.getElementById(this.name).classList.add('open-dialog');
   }
   getAlert(){
-    return this.alert?'alert': '';
+    return this.alert ? 'alert' : '';
   }
   ngOnInit(): void {
-    this.ref['close'] = this.close
-    this.ref['open'] = this.open
+    this.ref.close = this.close;
+    this.ref.open = this.open;
   }
 
 }
