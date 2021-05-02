@@ -22,6 +22,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/manifest.webmanifest",
               "src/manifest.webmanifest"
             ],
             "styles": [
@@ -68,7 +69,8 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             }
-          }
+          },
+
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -97,6 +99,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/manifest.webmanifest",
               "src/manifest.webmanifest"
             ],
             "styles": [
@@ -131,6 +134,8 @@
           }
         }
       }
+
     }},
-  "defaultProject": "rrestofados-frontend"
+  "defaultProject": "rrestofados-frontend",
+
 }

@@ -4,20 +4,22 @@
     <form [formGroup]="form" (ngSubmit)="salvar()">
       <div class="row">
         <div class="col-12 text-center text-md-left">
-          <h1 class="cl-default-dark">{{title}}</h1>
+          <div class="title-page">
+            <div>{{title}}</div>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 mb-2">
           <input-content label="Nome" [control]="getControl('nome')">
-            <input formControlName="nome" class="input">
+            <input formControlName="nome" class="input" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
           <input-content label="Descricao"
                          [opcional]="true"
                          [control]="getControl('descricao')">
-            <input class="input" formControlName="descricao">
+            <input class="input" formControlName="descricao" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
@@ -37,7 +39,7 @@
       <div class="row">
         <div class="col-md-4 mb-2">
           <input-content label="Hexadecimal" [opcional]="true" [control]="getControl('hexadecimal')">
-            <input class="input" formControlName="hexadecimal">
+            <input class="input" formControlName="hexadecimal" maxlength="15">
           </input-content>
         </div>
         <div class="col-md-4 mb-2 d-flex align-items-end">

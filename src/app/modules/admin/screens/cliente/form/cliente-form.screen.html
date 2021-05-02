@@ -3,18 +3,20 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <h1 class="cl-default-dark">{{title}}</h1>
+          <div class="title-page">
+            <div>{{title}}</div>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 mb-2">
           <input-content label="Nome" [control]="getControl('nome')">
-            <input formControlName="nome" name="nome" class="input" (click)="teste()">
+            <input formControlName="nome" name="nome" class="input" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
           <input-content  label="E-mail" [control]="getControl('email')">
-            <input formControlName="email" name="email" valid-email class="input">
+            <input formControlName="email" name="email" valid-email class="input" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
@@ -69,29 +71,29 @@
       <div class="row">
         <div class="col-md-4 mb-2" formGroupName="endereco" >
           <input-content  label="CEP" opcional="true" [control]="getControlEndereco('cep')">
-            <input mask-cep name="cep" formControlName="cep" class="input"/>
+            <input mask-cep name="cep" formControlName="cep" class="input" maxlength="15"/>
           </input-content>
         </div>
         <div class="col-md-8 mb-2" formGroupName="endereco">
           <input-content  label="Bairro" [control]="getControlEndereco('bairro')">
-            <input name="bairro" formControlName="bairro" class="input">
+            <input name="bairro" formControlName="bairro" class="input" maxlength="100">
           </input-content>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 mb-2" formGroupName="endereco">
           <input-content  label="Rua" [control]="getControlEndereco('rua')">
-            <input name="rua" formControlName="rua" class="input">
+            <input name="rua" formControlName="rua" class="input" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-4 mb-2" formGroupName="endereco">
           <input-content label="Número" [control]="getControlEndereco('numero')">
-            <input name="numero" formControlName="numero" class="input">
+            <input name="numero" formControlName="numero" class="input" maxlength="30">
           </input-content>
         </div>
         <div class="col-md-4 mb-2" formGroupName="endereco">
           <input-content label="Complemento" opcional="true" [control]="getControlEndereco('complemento')">
-            <input name="complemento" formControlName="complemento" class="input">
+            <input name="complemento" formControlName="complemento" class="input" maxlength="30">
           </input-content>
         </div>
       </div>
@@ -99,12 +101,12 @@
       <div class="row"  *ngFor="let group of telefonesArray.controls;let i = index" [formGroup]="group">
         <div class="col-md-3 mb-2">
           <input-content  label="Telefone" [control]="group.get('numero')">
-            <input  class="input" formControlName="numero">
+            <input  class="input" formControlName="numero" maxlength="20">
           </input-content>
         </div>
         <div class="col-md-3 mb-2">
           <input-content  label="Descrição" [control]="group.get('descricao')">
-            <input  class="input" formControlName="descricao">
+            <input  class="input" formControlName="descricao" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-2 mb-2">

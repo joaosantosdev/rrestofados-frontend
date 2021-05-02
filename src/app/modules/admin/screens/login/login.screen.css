@@ -54,3 +54,12 @@
 .img-login{
   width:285px;
 }
+.img-login-mobile {
+  width: 160px;
+  display: none;
+}
+@media (max-width: 768px) {
+  .img-login-mobile {
+    display: block;
+  }
+}

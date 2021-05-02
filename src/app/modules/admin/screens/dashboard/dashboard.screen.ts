@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DashboardState} from './state';
 import {environment} from '../../../../../environments/environment';
 import {Utils} from '../../../../core/utils';
@@ -15,7 +15,7 @@ export class DashboardScreen implements OnInit {
 
     {
       title: 'Home',
-      navigation: '/',
+      navigation: '',
       icon: 'perfil',
       first: true
     },
@@ -52,15 +52,26 @@ export class DashboardScreen implements OnInit {
     },
 
   ];
-  constructor() { }
-  get usuario(): any{
-    return DashboardState.getUsuario();
-  }
-  ngOnInit(): void {
+
+  constructor() {
   }
 
-  get urlImage(){
-      return Utils.geUserImageUrl(this.usuario.fotoPath)
+  get usuario(): any {
+    return DashboardState.getUsuario();
+  }
+
+  ngOnInit(): void {
+    if (this.usuario.admin) {
+      this.itemsSidebar.splice(2, 0, {
+        title: 'Usuários',
+        navigation: '/usuarios',
+        icon: 'perfil',
+      });
+    }
+  }
+
+  get urlImage() {
+    return Utils.geUserImageUrl(this.usuario.image);
   }
 
 }

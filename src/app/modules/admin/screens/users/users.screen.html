@@ -1,0 +1,87 @@
+<div class="content-main">
+  <form [formGroup]="form" (submit)="salvar()">
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="title-page">
+            <div>{{title}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input-content label="Nome" [control]="form.get('nome')">
+            <input class="input"
+                   type="text"
+                   maxlength="100"
+                   formControlName="nome">
+          </input-content>
+        </div>
+        <div class="col-md-6 ">
+          <input-content label="E-mail" [control]="form.get('email')">
+            <input class="input"
+                   type="email"
+                   maxlength="100"
+                   formControlName="email">
+          </input-content>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input-content label="Senha" [control]="form.get('senha')">
+            <input class="input"
+                   type="password"
+                   maxlength="100"
+                   formControlName="senha">
+          </input-content>
+        </div>
+        <div class="col-md-6 mb-2">
+          <input-content label="Repetir senha" [control]="form.get('rSenha')">
+            <input class="input"
+                   type="password"
+                   maxlength="100"
+                   formControlName="rSenha">
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <button type="submit" class="button primary block">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="content-main">
+    <div class="row" *ngFor="let group of  usersGroup">
+      <div class="col-md-3" [ngClass]="{'mb-2': i+1 < group.length}" *ngFor="let user of group;let i = index">
+        <card-user (onChangeStatus)="changeStatus($event)" [user]="user"></card-user>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<modal-dialog [alert]="true"
+              [ref]="dlCode"
+              title="Código de verificação"
+              name="cancelService">
+  <div class="row">
+    <div class="col-md-12">
+      <p>{{messageCode}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <div class="content-code">
+        <input maxlength="4" [(ngModel)]="code">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <button class="button primary" (click)="salvar()">OK</button>
+    </div>
+  </div>
+</modal-dialog>

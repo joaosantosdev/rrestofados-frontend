@@ -3,19 +3,45 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <h1 class="cl-default-dark">{{title}}</h1>
+          <div class="title-page">
+            <div class="dropdown actions-dropdown">
+              <span class=" " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                <icon name="actions" class="actions" size="20px" *ngIf="idServico && !cancelado"></icon>
+              </span>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-item">
+                  <a [href]="url_report" class="item" download="servico.pdf" target="_blank">Relatório</a>
+                </div>
+                <div class="dropdown-item">
+                  <div class="item" (click)="clickImages()">Inserir Imagem</div>
+                </div>
+              </div>
+            </div>
+            <div>{{title}}</div>
+          </div>
         </div>
       </div>
+
+
       <div class="row">
         <div class="col-md-4 mb-2">
           <input-content label="Cliente" [control]="getControl('clienteId')">
-            <input-dialog (click)="openDialogClient()" [value]="seletedClient.nome">
+            <input-dialog (onClick)="openDialogClient()"
+                          [disabled]="cancelado"
+                          [value]="seletedClient.nome">
             </input-dialog>
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
           <input-content label="Data" [control]="getControl('data')">
-            <input class="input" type="date" formControlName="data">
+
+            <input class="input"
+                   type="date"
+                   formControlName="data"
+                   [disabled]="cancelado"
+                   [ngClass]="{'disabled': cancelado}"
+                   [readOnly]="cancelado">
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
@@ -25,6 +51,7 @@
               field="descricao"
               [model]="form.controls['status'].value"
               id="id"
+              [disabled]="cancelado"
             >
             </select-search>
           </input-content>
@@ -33,7 +60,12 @@
       <div class="row">
         <div class="col-md-4 mb-2">
           <input-content label="Data da Entrega" [control]="getControl('dataEntrega')">
-            <input class="input" type="date" formControlName="dataEntrega">
+            <input class="input"
+                   type="date"
+                   formControlName="dataEntrega"
+                   [disabled]="cancelado"
+                   [ngClass]="{'disabled': cancelado}"
+                   [readOnly]="cancelado">
           </input-content>
         </div>
         <div class="col-md-4 mb-2">
@@ -42,6 +74,7 @@
               [id]="'id'"
               [options]="listaTecidos"
               field="descricao"
+              [disabled]="cancelado"
               (changeValue)="onChangeTecido($event)"
               [model]="getControl('tecidoId').value"
             >
@@ -54,6 +87,7 @@
               [id]="'id'"
               [options]="listaCores"
               field="descricao"
+              [disabled]="cancelado"
               (changeValue)="onChangeCor($event)"
               [model]="getControl('corId').value"
             >
@@ -62,9 +96,36 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 mb-2">
           <input-content label="Descrição" [control]="getControl('descricao')">
-            <textarea class="input" formControlName="descricao"></textarea>
+            <textarea class="input"
+                      formControlName="descricao"
+                      [disabled]="cancelado"
+                      maxlength="500"
+                      [ngClass]="{'disabled': cancelado}"
+                      [readOnly]="cancelado"></textarea>
+          </input-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input-content label="Materiais a serem utilizados" [control]="getControl('materiasUtilizados')">
+            <textarea class="input"
+                      formControlName="materiaisUtilizados"
+                      [disabled]="cancelado"
+                      maxlength="300"
+                      [ngClass]="{'disabled': cancelado}"
+                      [readOnly]="cancelado"></textarea>
+          </input-content>
+        </div>
+        <div class="col-md-6 mb-2">
+          <input-content label="Observação" [control]="getControl('observacao')">
+            <textarea class="input"
+                      maxlength="300"
+                      formControlName="observacao"
+                      [disabled]="cancelado"
+                      [ngClass]="{'disabled': cancelado}"
+                      [readOnly]="cancelado"></textarea>
           </input-content>
         </div>
       </div>
@@ -79,6 +140,7 @@
             <input-content label="Estado" [control]="getControlEndereco('estadoId')">
               <select-search
                 [id]="'id'"
+                [disabled]="cancelado"
                 [options]="listaEstados"
                 field="nome"
                 [model]="getControlEndereco('estadoId').value"
@@ -91,6 +153,7 @@
             <input-content label="Municipio" [control]="getControlEndereco('municipioId')">
               <select-search
                 [id]="'id'"
+                [disabled]="cancelado"
                 [options]="listaMunicipios"
                 field="nome"
                 [model]="getControlEndereco('municipioId').value"
@@ -102,31 +165,58 @@
           </div>
           <div class="col-md-4 mb-2">
             <input-content label="CEP" [control]="getControlEndereco('cep')">
-              <input class="input" formControlName="cep">
+              <input class="input"
+                     maxlength="50"
+                     formControlName="cep"
+                     [disabled]="cancelado"
+                     [ngClass]="{'disabled': cancelado}"
+                     [readOnly]="cancelado">
             </input-content>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4 mb-2">
-            <input-content label="Bairro" [control]="getControlEndereco('bairro')">
-              <input class="input" formControlName="bairro">
+            <input-content label="Bairro"
+                           [control]="getControlEndereco('bairro')"
+            >
+              <input class="input"
+                     formControlName="bairro"
+                     maxlength="100"
+                     [disabled]="cancelado"
+                     [ngClass]="{'disabled': cancelado}"
+                     [readOnly]="cancelado">
             </input-content>
           </div>
           <div class="col-md-4 mb-2">
             <input-content label="Rua" [control]="getControlEndereco('rua')">
-              <input class="input" formControlName="rua">
+              <input class="input"
+                     maxlength="100"
+                     formControlName="rua"
+                     [disabled]="cancelado"
+                     [ngClass]="{'disabled': cancelado}"
+                     [readOnly]="cancelado">
             </input-content>
           </div>
           <div class="col-md-4 mb-2">
             <input-content label="Número" [control]="getControlEndereco('numero')">
-              <input class="input" formControlName="numero">
+              <input class="input"
+                     formControlName="numero"
+                     [disabled]="cancelado"
+                     maxlength="30"
+                     [ngClass]="{'disabled': cancelado}"
+                     [readOnly]="cancelado">
             </input-content>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4 mb-2">
             <input-content label="Complemnto" opcional="true" [control]="getControlEndereco('complemento')">
-              <input class="input" formControlName="complemento">
+              <input class="input"
+                     formControlName="complemento"
+                     [disabled]="cancelado"
+                     maxlength="30"
+                     [ngClass]="{'disabled': cancelado}"
+                     [readOnly]="cancelado">
             </input-content>
           </div>
         </div>
@@ -141,9 +231,11 @@
           <input-content label="Subtotal">
             <input class="input"
                    currencyMask
+                   [disabled]="cancelado"
+                   [ngClass]="{'disabled': cancelado}"
+                   [readOnly]="cancelado"
                    (keyup)="changeValorTotal()"
                    formControlName="subtotal"
-
                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
           </input-content>
         </div>
@@ -151,6 +243,9 @@
           <input-content label="Valor Frete">
             <input class="input" formControlName="valorFrete" currencyMask
                    (keyup)="changeValorTotal()"
+                   [disabled]="cancelado"
+                   [ngClass]="{'disabled': cancelado}"
+                   [readOnly]="cancelado"
                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
           </input-content>
         </div>
@@ -158,6 +253,9 @@
           <input-content label="Parcelas">
             <input class="input"
                    min="1"
+                   [disabled]="cancelado"
+                   [ngClass]="{'disabled': cancelado}"
+                   [readOnly]="cancelado"
                    type="number"
                    formControlName="parcelas"
                    (change)="changeParcelas($event)"
@@ -175,7 +273,7 @@
       </div>
       <div>
 
-        <div class="row">
+        <div class="row" *ngIf="pagamentosArray.length > 0">
           <div class="col-md-4">
             <label class="label">Valor</label>
           </div>
@@ -192,6 +290,9 @@
           <div class="col-md-4 mb-2">
             <input-content label="" [control]="group.get('valor')">
               <input class="input" currencyMask formControlName="valor"
+                     [disabled]="cancelado"
+                     [ngClass]="{'disabled': cancelado}"
+                     [readOnly]="cancelado"
                      [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
             </input-content>
           </div>
@@ -199,8 +300,9 @@
             <input-content label="" [control]="group.get('formaPagamentoId')">
               <select-search
                 [id]="'id'"
-                [options]="listaTecidos"
-                field="descricao"
+                [disabled]="cancelado"
+                [options]="listaFormasPagamentos"
+                field="nome"
                 [model]="group.get('formaPagamentoId').value"
                 (changeValue)="onChangeFormaPagamento($event, group)"
               >
@@ -209,6 +311,7 @@
           </div>
           <div class="col-md-2 mb-2">
             <checkbox [value]="group.get('pago').value"
+                      [disabled]="cancelado"
                       (onChange)="onChangePago($event,group)">
             </checkbox>
           </div>
@@ -216,20 +319,65 @@
       </div>
       <div class="row">
         <div class="col-md-3">
-          <button type="submit" class="button  btn-block primary">Salvar</button>
+          <button type="submit"
+                  class="button  btn-block primary"
+                  [disabled]="cancelado">Salvar
+          </button>
         </div>
       </div>
     </div>
   </div>
 </form>
-<modal-dialog title="Clientes" [ref]="ctlDlCliente">
+<modal-dialog title="Imagens" [ref]="dlImages" name="images_servicos">
+
+  <div class="row" *ngFor="let servicoImage of listImages; let i = index">
+    <div class="col-md-12 mb-2 d-flex justify-content-center">
+      <form>
+        <div class="content-image c-pointer" (click)="changeImage(i)">
+          <img [src]="getUrlImage(servicoImage.image)" *ngIf="servicoImage.image.base64 || servicoImage.image.name"
+               width="100%" height="170px">
+          <icon *ngIf="!(servicoImage.image.base64 || servicoImage.image.name)" name="galery" class="fill-content-dark"
+                size="170px"></icon>
+        </div>
+      </form>
+
+    </div>
+    <div class="col-md-12 mb-2 ">
+      <textarea class="input" rows="4" [(ngModel)]="listImages[i].descricao"></textarea>
+    </div>
+    <div class="col-md-12 mb-2 d-flex flex-row justify-content-start align-items-end">
+      <button type="button"
+              *ngIf="listImages.length > 1"
+              (click)="removeImage(i)"
+              style="margin-right: 5px"
+              class="button default-dark   align-items-center">
+        <icon name="trash" size="20px" class="fill-white"></icon>
+      </button>
+      <button type="button"
+              (click)="addImage()"
+              *ngIf="listImages.length == i+1"
+
+              class="button default-dark   align-items-center">
+        <icon name="plus" size="20px" class="fill-white"></icon>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <button class="button primary block" (click)="salvarImages()">Salvar</button>
+    </div>
+  </div>
+
+</modal-dialog>
+
+<modal-dialog title="Clientes" [ref]="ctlDlCliente" name="clientes_servico">
   <div class="">
     <div class="row">
       <div class="col-md-8">
-        <input class="input" placeholder="Pesquisar">
+        <input class="input" placeholder="Pesquisar" [(ngModel)]="searchText">
       </div>
       <div class="col-md-4">
-        <button class="button primary block">Pesquisar</button>
+        <button class="button primary block" (click)="clickSearchClients()">Pesquisar</button>
       </div>
     </div>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">

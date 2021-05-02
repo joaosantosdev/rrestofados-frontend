@@ -2,10 +2,11 @@
   <div class="content-login">
     <div class="panel-left justify-content-center align-items-center ">
       <img src="./assets/imgs/login.jpg" class="img-login"/>
-
     </div>
 
     <form class="panel-right"[formGroup]="usuario" (ngSubmit)="entrar()">
+      <img src="./assets/imgs/logo_mobile.png" class="img-login-mobile"/>
+
       <div class="row block">
         <div class="col-12">
           <input-content label="Email" [control]="this.usuario.get('email')"  >

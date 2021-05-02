@@ -11,14 +11,15 @@ import {DialogAlert} from '../../../../../core/dialog-alert';
 })
 export class ClienteListScreen implements OnInit {
   public loading = false;
-  title = 'sad';
+  title = 'Clientes';
   public searchText = '';
   public clients = [];
   public pagination: any = {
     page: 1,
     perPage: 5,
     count: 0,
-    totalCount:0
+    totalCount: 0,
+    search:{}
   };
   public cliente = new Cliente();
 
@@ -32,7 +33,7 @@ export class ClienteListScreen implements OnInit {
   async getClients(): Promise<void> {
     this.clients = [];
     this.loading = true;
-    const response = await this.service.getClients(this.pagination);
+    const response = await this.service.getClients({...this.pagination, search: JSON.stringify(this.pagination.search)});
     this.clients = response.data;
     this.pagination.count = response.count;
     this.pagination.totalCount = response.totalCount;
@@ -55,14 +56,22 @@ export class ClienteListScreen implements OnInit {
 
   pesquisar() {
     this.pagination.page = 1;
+    this.pagination.search = {};
+    if (this.searchText.trim() !== '') {
+      this.pagination.search = {
+        email: this.searchText.trim(),
+        cpf: this.searchText.trim(),
+        nome: this.searchText.trim()
+      };
+    }
     this.getClients();
   }
 
   async deleteClient(id): Promise<void> {
     if (await DialogAlert.confirm({message: 'Deseja realmete excluir esse cliente?'})) {
-        await this.service.deleteClientById(id).then(response => {
-            DialogAlert.info({message: 'Cliente removido com sucesso.'});
-            this.getClients();
+      await this.service.deleteClientById(id).then(response => {
+        DialogAlert.info({message: 'Cliente removido com sucesso.'});
+        this.getClients();
       });
     }
   }

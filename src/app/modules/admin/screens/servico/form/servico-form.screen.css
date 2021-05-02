@@ -1,0 +1,6 @@
+.content-image{
+  border: 2px solid var(--content);
+  border-radius: var(--radius);
+  width: 191px;
+  padding: 5px;
+}

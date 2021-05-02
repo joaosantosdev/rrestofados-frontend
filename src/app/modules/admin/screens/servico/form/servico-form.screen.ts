@@ -12,6 +12,7 @@ import {FormaPagamentoService} from '../../../../../services/FormaPagamentoServi
 import {ServicoService} from '../../../../../services/ServicoService';
 import {DialogAlert} from '../../../../../core/dialog-alert';
 import {ActivatedRoute, Router} from '@angular/router';
+import {environment} from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-servico-form-screen',
@@ -31,8 +32,11 @@ export class ServicoFormScreen implements OnInit {
     perPage: 5,
     totalCount: 0,
     page: 1,
-    count: 0
+    count: 0,
+    search: {}
   };
+  searchText = '';
+  cancelado = false;
   public loadingClient = false;
   public seletedClient: any = {};
   public form: FormGroup;
@@ -41,6 +45,9 @@ export class ServicoFormScreen implements OnInit {
   public parcelas = 1;
   public idServico = null;
   public formPagamento: FormGroup;
+  public dlImages = new Dialog();
+  public listImages = [];
+  public $foto = null;
 
 
   constructor(public ctlDlCliente: Dialog,
@@ -56,9 +63,10 @@ export class ServicoFormScreen implements OnInit {
   }
 
   async ngOnInit() {
+    this.listImages.push(this.createImage());
     this.cleanForm();
     this.idServico = this.route.snapshot.params.id;
-    if(this.idServico){
+    if (this.idServico) {
       this.title = 'Atualização serviço';
     }
 
@@ -72,14 +80,18 @@ export class ServicoFormScreen implements OnInit {
     this.listaFormasPagamentos = response.data;
 
     if (this.idServico) {
-
       await this.servicoService.getServicoById(this.idServico).then(async response => {
         const data = response.data;
+        this.cancelado = data.cancelado;
+        if (this.cancelado) {
+          this.title = 'Serviço cancelado';
+        }
         if (data.endereco) {
           await this.onChangeEstado(data.endereco.estadoId);
           await this.onChangeMunicipio(data.endereco.municipioId);
         }
         this.cleanForm(response.data);
+        this.getImages();
       }).catch(error => {
         DialogAlert.info({message: error.error});
         this.router.navigate(['/servicos']);
@@ -87,14 +99,29 @@ export class ServicoFormScreen implements OnInit {
     }
   }
 
+  async getImages(){
+    await this.servicoService.getImages(this.idServico).then((resp: any) => {
+      if (resp.data.length > 0) {
+        this.listImages = resp.data.map(item => {
+          delete item.image.id;
+          return item;
+        });
+      }
+      console.log(resp);
+    }).catch(error => {
+      DialogAlert.info({message: error.error});
+    });
+  }
   public cleanForm(servico = null) {
     const endereco = servico ? servico.endereco : null;
-    const valorFrete = servico ? (servico.valorFrete  || 0 ): 0;
-    this.seletedClient = servico?servico.cliente:{};
+    const valorFrete = servico ? (servico.valorFrete || 0) : 0;
+    this.seletedClient = servico ? servico.cliente : {};
 
     this.form = this.builder.group({
       data: [servico ? servico.data : null, [Validators.required]],
       descricao: [servico ? servico.descricao : null, [Validators.required]],
+      observacao: [servico ? servico.observacao : null],
+      materiaisUtilizados: [servico ? servico.materiaisUtilizados : null],
       dataEntrega: [servico ? servico.dataEntrega : null, [Validators.required]],
       tecidoId: [servico ? servico.tecidoId : null, Validators.required],
       corId: [servico ? servico.corId : null, Validators.required],
@@ -115,7 +142,7 @@ export class ServicoFormScreen implements OnInit {
     const subtotal = servico ? servico.pagamentos.map(p => p.valor).reduce((v1, v2) => v1 + v2) : 0;
     this.formPagamento = this.builder.group({
       subtotal: [subtotal, [Validators.required]],
-      valorTotal: [valorFrete+subtotal, [Validators.required]],
+      valorTotal: [valorFrete + subtotal, [Validators.required]],
       parcelas: [servico ? servico.pagamentos.length : 0, [Validators.required]],
     });
   }
@@ -139,18 +166,31 @@ export class ServicoFormScreen implements OnInit {
 
 
   async salvar() {
+
+
     const valuesEndereco = Object.values(this.formEndereco.value).filter(v => v);
     if (this.form.valid && (valuesEndereco.length === 0 || this.formEndereco.valid)) {
+      if (this.pagamentosArray.length === 0) {
+        return DialogAlert.info({message: `Informe pelo menos uma parcelas.`});
+      }
+      const valorTotal = this.valorTotal;
+      const valorParcelas = this.pagamentosArray.controls.map(item => item.get('valor').value).reduce((v1, v2) => v1 + v2);
+      if (valorTotal.toFixed(2) !== valorParcelas.toFixed(2)) {
+        const passou = this.valorTotal < valorParcelas;
+        const valor = passou ? valorParcelas - valorTotal : valorTotal - valorParcelas;
+        return DialogAlert.info({message: `Valor total não corresponde com as parcelas. ${passou ? 'Passou' : 'Faltando'} R$ ${Utils.floatToCurrency(valor)}.`});
+      }
+
       const json = this.form.value;
       if (this.formEndereco.value.municipioId !== 0) {
         json.endereco = this.formEndereco.value;
       }
-      if(this.idServico){
-        this.servicoService.updateServico( this.idServico, json).then(response => {
+      if (this.idServico) {
+        this.servicoService.updateServico(this.idServico, json).then(response => {
           this.router.navigate([`/servicos`]);
           DialogAlert.info({message: response.data});
         });
-      }else{
+      } else {
         this.servicoService.saveServico(json).then(response => {
           DialogAlert.info({message: response.data.message});
           this.router.navigate([`/servico/${response.data.id}`]);
@@ -177,7 +217,7 @@ export class ServicoFormScreen implements OnInit {
   }
 
   public async searchClients() {
-    const response = await this.clientService.getClients(this.paginator);
+    const response = await this.clientService.getClients({...this.paginator, search: JSON.stringify(this.paginator.search)});
     this.listaClientes = response.data;
     this.paginator = {...this.paginator, ...response};
   }
@@ -252,7 +292,97 @@ export class ServicoFormScreen implements OnInit {
   }
 
   changeValorTotal() {
-    console.log(this.valorTotal)
+    console.log(this.valorTotal);
     this.formPagamento.get('valorTotal').setValue(this.valorTotal);
+  }
+
+  clickSearchClients() {
+    this.paginator.page = 1;
+    this.paginator.search = {};
+    if (this.searchText.trim() !== '') {
+      this.paginator.search['email'] = this.searchText;
+      this.paginator.search['cpf'] = this.searchText;
+      this.paginator.search['nome'] = this.searchText;
+    }
+    this.searchClients();
+  }
+
+  get url_report() {
+    return `${environment.baseUrl}reports/servico/${this.idServico}?token=${Utils.getToken()}`;
+  }
+
+  clickImages() {
+    this.dlImages.open();
+  }
+
+  get imagesGroup() {
+    return Utils.arrayChunk(this.listImages, 2);
+  }
+
+  createImage() {
+    return {
+      descricao: null,
+      image: {
+        ext: null,
+        base64: null
+      }
+    };
+  }
+
+  changeImage(position) {
+    const changeImage = (event) => {
+      this.$foto = event.target;
+      const fileList = event.target.files;
+      if (fileList.length > 0) {
+        const ext = fileList[0].type.split('/')[1];
+        const reader = new FileReader();
+        reader.onload = () => {
+          console.log( reader.result)
+          this.listImages[position].image = {
+            ...this.listImages[position].image,
+            base64: reader.result,
+            ext
+          };
+        };
+        reader.readAsDataURL(fileList[0]);
+      }
+    };
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'jpg,png';
+    input.addEventListener('change', changeImage);
+    input.click();
+  }
+
+  addImage() {
+    this.listImages.push(this.createImage());
+  }
+
+  removeImage(i) {
+    this.listImages = this.listImages.filter((index, key) => key !== i);
+  }
+
+  salvarImages() {
+    const images = [...this.listImages].filter(item => item.image.ext).map(item => {
+      if (item.image.base64) {
+        item.image.base64 = item.image.base64.split(',')[1];
+      }
+      return {...item};
+    });
+    this.dlImages.close();
+
+    this.servicoService.saveImages(this.idServico, images).then(response => {
+      this.getImages();
+      DialogAlert.success({message: 'Imagens salvas com sucesso.'});
+    }).catch(response => {
+      DialogAlert.error({message: response.error.error});
+    });
+  }
+
+  getUrlImage(image) {
+    if (image.base64) {
+      return image.base64;
+    }
+    return null;
   }
 }

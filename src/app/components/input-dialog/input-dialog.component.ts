@@ -8,10 +8,13 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class InputDialogComponent implements OnInit {
 
   @Output()
-  public click = new EventEmitter();
+  public onClick = new EventEmitter();
 
   @Input()
-  public value = ''
+  public value = '';
+
+  @Input()
+  public disabled ;
 
   constructor() {
   }
@@ -21,8 +24,12 @@ export class InputDialogComponent implements OnInit {
   }
 
 
-  onClick(){
-    this.click.emit();
+  click() {
+    console.log(this.disabled)
+    if (this.disabled) {
+      return;
+    }
+    this.onClick.emit();
   }
 
 }

@@ -14,10 +14,10 @@ export class UtilsService{
   }
   public async getEstados(): Promise<any>{
     const url = (this.url + '/estados');
-    return await this.service.get(url).then(response => response).catch(this.handlerError);
+    return await this.service.getSecurity(url).then(response => response).catch(this.handlerError);
   }
   public async getMunicipios(estado): Promise<any>{
     const url = `${this.url}/estado/${estado}/municipios`;
-    return await this.service.get(url).then(response => response).catch(this.handlerError);
+    return await this.service.getSecurity(url).then(response => response).catch(this.handlerError);
   }
 }

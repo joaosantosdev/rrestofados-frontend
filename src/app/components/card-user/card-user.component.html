@@ -1,0 +1,12 @@
+<div class="content-card-user">
+<div class="content-card-user-img">
+  <img [src]="urlImage" class="card-user-img">
+</div>
+  <div class="content-card-user-info">
+    <div class="info">{{user.nome}}</div>
+    <div class="info">{{user.email}}</div>
+    <div class="info">{{user.status | status}}</div>
+    <icon name="inactive" size="25px" class="fill-danger c-pointer" *ngIf="user.status === status.inativo" (click)="changeStatus()"></icon>
+    <icon name="active" size="25px" class="fill-success c-pointer" *ngIf="user.status === status.ativo" (click)="changeStatus()" ></icon>
+  </div>
+</div>

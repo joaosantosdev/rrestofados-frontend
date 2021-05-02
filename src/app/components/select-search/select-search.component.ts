@@ -13,6 +13,9 @@ export class SelectSearchComponent implements OnInit {
   _options = [];
 
   @Input()
+  disabled = false;
+
+  @Input()
   set model(val: any) {
     this.value = val;
     this.callModel(val);
@@ -85,6 +88,9 @@ export class SelectSearchComponent implements OnInit {
     }
   }
   toggle(event){
+    if(this.disabled){
+      return;
+    }
     event.stopPropagation();
     event.preventDefault();
     this.isOpen = !this.isOpen ;

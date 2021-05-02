@@ -111,3 +111,21 @@ border-radius: 100%;
 .content-dashboard:nth-child(1){
   display:none!important;
 }
+.content-code{
+  display: flex;
+  flex-direction: row;
+}
+
+.content-code input{
+  margin: 5px;
+  padding: 10px;
+  max-width: 220px;
+  width: 100%;
+  outline: none;
+  border: 2px solid var(--primary);
+  text-align: center;
+  border-radius: var(--radius);
+  color:var(--content-dark);
+  font-family: var(--font-semi-bold);
+  font-size: 18px;
+}

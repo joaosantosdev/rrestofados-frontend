@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'modal-dialog',
@@ -18,25 +18,40 @@ export class DialogComponent implements OnInit {
   @Input()
   public classStyle;
 
-  constructor() { }
+  @Output()
+  public onClose = new EventEmitter();
+
+  constructor() {
+  }
 
 
-  getClass(){
+  getClass() {
     return this.classStyle ? this.classStyle : '';
   }
 
-  close = () => {
+  close = (event = null) => {
+    if (event && event.target.id !== this.name) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
     document.getElementById(this.name).classList.remove('open-dialog');
+    this.onClose.emit();
   }
+
   open = () => {
     document.getElementById(this.name).classList.add('open-dialog');
   }
-  getAlert(){
+
+  getAlert() {
     return this.alert ? 'alert' : '';
   }
+
   ngOnInit(): void {
+    this.ref.name = this.name;
     this.ref.close = this.close;
     this.ref.open = this.open;
   }
+
 
 }

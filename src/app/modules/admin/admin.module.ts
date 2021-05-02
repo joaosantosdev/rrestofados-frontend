@@ -22,16 +22,22 @@ import {SelectSearchComponent} from 'src/app/components/select-search/select-sea
 import {CorListScreen} from './screens/cor/list/cor-list.screen';
 import {FormaPagamentoScreen} from './screens/forma-pagamento/forma-pagamento.screen';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
-import { ServicoFormScreen } from './screens/servico/form/servico-form.screen';
+import {ServicoFormScreen} from './screens/servico/form/servico-form.screen';
 import {InputDialogComponent} from '../../components/input-dialog/input-dialog.component';
 
-import { NgxCurrencyModule } from "ngx-currency";
-import { ServicoListScreen } from './screens/servico/list/servico-list.screen';
+import {NgxCurrencyModule} from 'ngx-currency';
+import {ServicoListScreen} from './screens/servico/list/servico-list.screen';
+import {SimNaoPipe} from '../../pipes/SimNaoPipe';
+import {UsersScreen} from './screens/users/users.screen';
+import {AppModule} from '../../app.module';
+import {CardUserComponent} from '../../components/card-user/card-user.component';
 
 @NgModule({
   declarations: [
     DashboardScreen,
+    CardUserComponent,
     StatusPipe,
+    SimNaoPipe,
     LoginScreen,
     IconComponent,
     LoadingComponent,
@@ -52,20 +58,20 @@ import { ServicoListScreen } from './screens/servico/list/servico-list.screen';
     CorListScreen,
     FormaPagamentoScreen,
     ServicoFormScreen,
-    ServicoListScreen
+    ServicoListScreen,
+    UsersScreen
   ],
   imports: [
     CommonModule,
     AdminRouting,
     FormsModule,
     ReactiveFormsModule,
-    NgxCurrencyModule
-
+    NgxCurrencyModule,
   ],
 
   exports: [
     IconComponent,
-    StatusPipe
+    StatusPipe,
   ]
 })
 export class AdminModule {

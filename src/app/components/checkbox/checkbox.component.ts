@@ -13,6 +13,8 @@ export class CheckboxComponent{
 
   @Output()
   onChange = new EventEmitter();
+  @Input()
+  disabled;
 
   @Input()
   set value(v){
@@ -20,6 +22,9 @@ export class CheckboxComponent{
   }
 
   change(){
+    if(this.disabled){
+      return;
+    }
     this.value = !this._value;
     console.log(this._value);
     this.onChange.emit(this._value);

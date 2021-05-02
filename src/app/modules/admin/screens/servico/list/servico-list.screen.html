@@ -2,12 +2,14 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <h1 class="cl-default-dark">Serviços</h1>
+        <div class="title-page">
+          <div>Serviços</div>
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-7 mb-2">
-        <input placeholder="Cliente, CPF, E-mail" class="input"  [(ngModel)]="searchText">
+        <input placeholder="Cliente, CPF, E-mail" class="input" [(ngModel)]="searchText">
       </div>
       <div class="col-md-1 mb-2 d-flex align-items-end">
         <button class="button primary block" (click)="dialogFiltros()">
@@ -31,25 +33,27 @@
           <th class="cl-default">Cliente</th>
           <th class="cl-default">CPF</th>
           <th class="cl-default">E-mail</th>
+          <th class="cl-default">Cancelado</th>
           <th class="cl-default">Status</th>
           <th class="cl-default">Opções</th>
           </thead>
           <tbody>
           <tr [hidden]="(loading == false && servicos.length > 0)">
-            <td colspan="6">
+            <td colspan="8">
               <div class="d-flex justify-content-center">
-                <loading message="Nenhum serviços encontrado" [showMessage]="loading == false && servicos.length == 0"
+                <loading message="Nenhum serviço encontrado" [showMessage]="loading == false && servicos.length == 0"
                          [status]="loading" size="80px"></loading>
               </div>
             </td>
           </tr>
           <tr *ngFor="let servico of servicos">
             <td data-label="ID" class="cl-default">{{servico.id}}</td>
-            <td data-label="Cor" class="cl-default">{{servico.cor.descricao}}</td>
-            <td data-label="Tecido" class="cl-default">{{servico.tecido.descricao}}</td>
+            <td data-label="Cor" class="cl-default">{{servico.cor.nome}}</td>
+            <td data-label="Tecido" class="cl-default">{{servico.tecido.nome}}</td>
             <td data-label="Cliente" class="cl-default">{{servico.cliente.nome}}</td>
             <td data-label="CPF" class="cl-default">{{servico.cliente.cpf}}</td>
             <td data-label="E-mail" class="cl-default">{{servico.cliente.email}}</td>
+            <td data-label="Cancelado" class="cl-default">{{servico.cancelado | simNao}}</td>
             <td data-label="Status" class="cl-default">{{servico.status | status}}</td>
             <td data-label="Opções" class="cl-default">
               <div class="row">
@@ -59,9 +63,10 @@
                         class=" c-pointer fill-default"
                         size="23px"></icon>
                 </div>
-                <div class="col-md-2 col-2">
+                <div class="col-md-2 col-2" *ngIf="!servico.cancelado">
                   <icon
-                    name="trash"
+                    (click)="openDlCancel(servico)"
+                    name="cancel_service"
                     class="c-pointer fill-default"
                     size="23px"></icon>
                 </div>
@@ -78,49 +83,98 @@
                 (change)="changePage($event)"></pagination>
   </div>
 </div>
-<modal-dialog [ref]="dlFiltros" title="Filtros" name="clienteDelete">
-    <div class="row">
-      <div class="col-md-12 mb-2">
-        <input-content label="Nome">
-          <input class="input" [(ngModel)]="params.search.nome">
-        </input-content>
-      </div>
+<modal-dialog (onClose)="closeFilter()"
+              [ref]="dlFiltros"
+              title="Filtros"
+              name="filterService">
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <input-content label="Tecidos">
+        <select-search
+          [options]="listaTecidos"
+          [model]="params.search.tecido"
+          field="descricao"
+          (change)="onChangeStatus('tecido',$event)"
+          [id]="'id'"
+        >
+        </select-search>
+      </input-content>
     </div>
-    <div class="row">
-      <div class="col-md-12 mb-2">
-        <input-content label="Descrição">
-          <input class="input" [(ngModel)]="params.search.descricao">
-        </input-content>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <input-content label="Cores">
+        <select-search
+          [options]="listaCores"
+          [model]="params.search.cor"
+          field="descricao"
+          (change)="onChangeStatus('cor',$event)"
+          [id]="'id'"
+        >
+        </select-search>
+      </input-content>
     </div>
-    <div class="row">
-      <div class="col-md-12 mb-2">
-        <input-content label="Hexadecimal">
-          <input class="input" [(ngModel)]="params.search.hexadecimal">
-        </input-content>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <input-content label="Cancelado">
+        <select-search
+          [options]="listaSimNao"
+          [model]="params.search.cancelado"
+          field="descricao"
+          (change)="onChangeStatus('cancelado',$event)"
+          [id]="'id'"
+        >
+        </select-search>
+      </input-content>
     </div>
-    <div class="row">
-      <div class="col-md-12 mb-2">
-        <input-content label="Status">
-          <select-search
-            [options]="listaStatus"
-            [model]="params.search.status"
-            field="descricao"
-            (change)="onChangeStatus($event)"
-            id="id"
-          >
-          </select-search>
-        </input-content>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <input-content label="Status">
+        <select-search
+          [options]="listaStatus"
+          [model]="params.search.status"
+          field="descricao"
+          (change)="onChangeStatus('status',$event)"
+          [id]="'id'"
+        >
+        </select-search>
+      </input-content>
     </div>
-    <div class="row">
-      <div class="col-md-6 mb-2">
-        <button class="button primary-dark block" (click)="pesquisarFiltros()">Pesquisar</button>
-      </div>
-      <div class="col-md-6 mb-2">
-        <button class="button default block" (click)="cleanFieldsSearch()">Limpar</button>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-2">
+      <button class="button primary-dark block" (click)="searchFilters()">Pesquisar</button>
     </div>
+    <div class="col-md-6 mb-2">
+      <button class="button default block" (click)="cleanFilters()">Limpar</button>
+    </div>
+  </div>
 
+</modal-dialog>
+
+<modal-dialog [alert]="true"
+              [ref]="dlCancel"
+              title="Cancelar"
+              name="cancelService">
+  <div class="row">
+    <div class="col-md-12">
+      <p>Informe o motivo do cancelamento</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" [formGroup]="formCancel">
+      <input-content label="" [control]="formCancel.get('motivo')">
+        <textarea class="input" maxlength="200" formControlName="motivo"></textarea>
+      </input-content>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <button class="button primary"
+              (click)="cancelar()">OK
+      </button>
+    </div>
+  </div>
 </modal-dialog>

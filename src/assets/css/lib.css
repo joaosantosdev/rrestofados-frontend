@@ -13,10 +13,10 @@ body {
   --success-dark: #DEEFFF !important;
   --secondary: #da1178 !important;
   --secondary-dark: #cc4b42 !important;
-  --default: #6c757d !important;
-  --default-dark: #525353 !important;
+  --default: #707070 !important;
+  --default-dark: #707070 !important;
   --content: #ECECEC !important;
-  --content-dark: #565555 !important;
+  --content-dark: #707070 !important;
 
   --white: #fff;
   --black: #000;
@@ -31,7 +31,7 @@ body {
   --font-semi-bold: RalewaySemiBold;
   --font-regular: RalewayRegular;
   --shadow: 0px 0px 36px -30px rgba(0, 0, 0, 0.75) !important;
-  --disabled-color: #fbf5f5;
+  --disabled-color: #fffae6;
 }
 
 .center-sm {
@@ -63,6 +63,11 @@ body {
 }
 
 .disabled[disabled] {
+  background-color: var(--disabled-color);
+  cursor: no-drop;
+}
+
+.input:disabled {
   background-color: var(--disabled-color);
   cursor: no-drop;
 }
@@ -796,8 +801,17 @@ body {
   fill: var(--primary-dark);
 }
 
+.fill-success {
+  fill: var(--success);
+
+}
+
 .fill-danger {
   fill: var(--danger);
+}
+
+.fill-content-dark {
+  fill: var(--content-dark);
 }
 
 .fill-default {
@@ -906,8 +920,8 @@ body {
 }
 
 .active-primary {
-  color: var(--primary);
-  fill: var(--primary);
+  color: var(--primary)!important;
+  fill: var(--primary)!important;;
 
 }
 
@@ -929,7 +943,7 @@ body {
   tr {
     margin-bottom: 20px;
     border-radius: var(--radius);
-
+    border: 2px solid #ececec;
   }
 
   td::before {
@@ -942,6 +956,8 @@ body {
 
   td {
     text-align: left;
+    border: none !important;
+
   }
 }
 
@@ -973,4 +989,45 @@ body {
   color: var(--content-dark);
   font-size: 20px;
   margin-top: 10px;
+}
+
+
+.title-page {
+  font-size: 20px;
+  font-family: var(--font-semi-bold);
+  color: var(--content-dark);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.title-page .actions {
+  margin-top: -2px;
+  margin-right: 4px;
+  cursor: pointer;
+  fill: var(--content-dark);
+}
+.actions-dropdown .dropdown-item{
+  padding: 0!important;
+}
+.actions-dropdown .dropdown-item .item{
+  padding: 10px!important;
+  width: 100%;
+  display: flex;
+}
+.actions-dropdown .dropdown-item , a {
+  font-family: var(--font-regular);
+  cursor: pointer;
+  color: var(--content-dark) !important;
+  text-decoration: none!important;
+}
+.actions-dropdown a:hover{
+  text-decoration: none!important;
+
+}
+
+.actions-dropdown .dropdown-item:active {
+  background-color: var(--white) !important;
+  color: var(--content-dark) !important;
+
 }

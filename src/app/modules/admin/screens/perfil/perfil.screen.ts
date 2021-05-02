@@ -2,6 +2,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import UsuarioService from '../../../../services/UsuarioService';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Utils} from '../../../../core/utils';
+import {Dialog} from '../../../../components/dialog/dialog';
+import {DialogAlert} from '../../../../core/dialog-alert';
 
 @Component({
   selector: 'app-perfil',
@@ -12,11 +14,16 @@ export class PerfilScreen implements OnInit {
   @Output() emittedPost = new EventEmitter();
 
   form: FormGroup;
-  foto;
+  base64;
   fotoExt;
   $foto;
   loading = false;
   usuario = null;
+  image = null;
+  const;
+  code = null;
+  public dlCode = new Dialog();
+  messageCode = '';
 
   getControl(name) {
     return this.form ? this.form.get(name) : null;
@@ -42,33 +49,29 @@ export class PerfilScreen implements OnInit {
     } else {
       this.form.controls.r_senha.setErrors({...errors, passwordDistinct: true});
     }
-
     return new Promise((resolve, reject) => equals ? resolve(true) : null);
   }
 
   async ngOnInit() {
     this.usuario = await this.usuarioService.getUsuarioLogado();
-    this.foto = this.usuario.fotoBase64;
+    this.image = this.usuario.image;
     this.form = this.builder.group({
       email: [this.usuario.email, [Validators.required, Validators.email]],
       nome: [this.usuario.nome, Validators.required],
       senha: ['', [], this.validarSenha],
       r_senha: ['', [], this.validarSenha]
     });
+
   }
 
   changeFoto(event) {
     this.$foto = event.target;
     const fileList = event.target.files;
-    console.log(fileList);
     if (fileList.length > 0) {
       this.fotoExt = fileList[0].type.split('/')[1];
       const reader = new FileReader();
-
       reader.onload = () => {
-        this.foto = reader.result;
-        console.log( this.foto )
-
+        this.base64 = reader.result;
       };
       reader.readAsDataURL(fileList[0]);
     }
@@ -78,7 +81,8 @@ export class PerfilScreen implements OnInit {
     if (this.$foto) {
       this.$foto.value = null;
     }
-    this.foto = null;
+    this.base64 = null;
+    this.image = null;
   }
 
   async salvar() {
@@ -88,8 +92,8 @@ export class PerfilScreen implements OnInit {
 
     if (this.form.valid) {
       const usuario = {...this.form.value};
-      usuario.fotoBase64 = this.foto ? this.foto.split(',')[1] : this.foto;
-      usuario.fotoExt =  this.fotoExt;
+      let image = this.image;
+
       if (usuario.senha !== '') {
         delete usuario.r_senha;
         usuario.senha = btoa(usuario.senha);
@@ -97,23 +101,45 @@ export class PerfilScreen implements OnInit {
         delete usuario.senha;
         delete usuario.r_senha;
       }
+      if (!image && this.base64) {
+        image = {};
+      }
+      if (this.base64) {
+        image.base64 = this.base64.split(',')[1];
+        image.ext = this.fotoExt;
+      }
       this.loading = true;
-      await this.usuarioService.updateUsuario(this.usuario.id, usuario).then(data => {
-          Utils.setUsuario(data);
-          this.form.get('senha').setValue('');
-          this.form.get('r_senha').setValue('');
-          this.loading = false;
-      }).catch(error => {
-        this.loading = false;
+      usuario.image = image;
+      if (this.code) {
+        usuario.code = this.code;
+      }
+      await this.usuarioService.updateUsuario(usuario).then((data: any) => {
+        if (data.verification) {
+          this.messageCode = data.verification;
+          this.dlCode.open();
+          return;
+        }
 
+        Utils.setUsuario(data);
+        this.removerFoto();
+        this.form.get('senha').setValue('');
+        this.form.get('r_senha').setValue('');
+        this.image = data.image;
+        this.dlCode.close();
+        this.code = null;
+        DialogAlert.info({message: 'Usuário atualizado com sucesso.'});
+      }).catch(response => {
+        DialogAlert.error({message: response.error.error});
       });
+      this.loading = false;
 
     }
     Object.keys(this.form.controls).map(key => {
       this.form.controls[key].markAsDirty();
     });
   }
-  get urlImage(){
-    return Utils.geUserImageUrl(this.usuario.fotoPath)
+
+  get urlImage() {
+    return Utils.geUserImageUrl(this.image);
   }
 }

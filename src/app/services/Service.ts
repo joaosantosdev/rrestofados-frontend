@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Utils} from '../core/utils';
 import {environment} from '../../environments/environment';
 
@@ -7,10 +7,13 @@ import {environment} from '../../environments/environment';
 export class Service {
 
   private baseUrl = environment.baseUrl;
-  headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    Authorization: Utils.getToken()
-  });
+
+  get headers() {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: Utils.getToken()
+    });
+  }
 
   constructor(private http: HttpClient) {
 
@@ -39,7 +42,7 @@ export class Service {
   }
 
   public async getSecurity(url) {
-    return this.http.get(this.baseUrl + url, {
+    return await this.http.get(this.baseUrl + url, {
       headers: this.headers
     }).toPromise();
   }
@@ -64,15 +67,17 @@ export class Service {
     return this.http.post(this.baseUrl + url, JSON.stringify(body), {
       headers: this.headers
     }).toPromise();
-
   }
 
-  public post(url, body) {
-
+  public post(url, body, config = {}) {
+    console.log(config);
     return this.http.post(this.baseUrl + url, JSON.stringify(body), {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
+        'Content-Type': 'application/json',
+        ...config
+      }),
+
+
     }).toPromise();
 
   }

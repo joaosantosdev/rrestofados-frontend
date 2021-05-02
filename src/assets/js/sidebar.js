@@ -1,4 +1,15 @@
 (() => {
+
+  window.activeLoading = () =>{
+    const loading = document.querySelector(`#loading`);
+    loading.style = "display:flex";
+  }
+
+  window.inactiveLoading = () =>{
+    const loading = document.querySelector(`#loading`);
+    loading.style = "display:none";
+  }
+
   let selectData;
   let selectInput;
 

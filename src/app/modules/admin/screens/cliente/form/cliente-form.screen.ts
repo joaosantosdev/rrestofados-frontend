@@ -35,20 +35,19 @@ export class ClienteFormScreen implements OnInit {
 
   async ngOnInit() {
     this.idCliente = this.route.snapshot.params.id;
-    if(this.idCliente){
+    if (this.idCliente) {
       this.title = 'Atualização de cliente';
     }
     this.cleanForm();
     await this.utilsService.getEstados().then(response => {
       this.listaEstados = response.data;
     });
-    if(this.idCliente){
-      await this.clientService.getClientById(this.idCliente).then(async response=>{
+    if (this.idCliente) {
+      await this.clientService.getClientById(this.idCliente).then(async response => {
         await this.onChangeEstado(response.data.endereco.estadoId);
         this.cleanForm(response.data);
-        console.log(response.data.endereco.estadoId)
-      }).catch(error=>{
-        DialogAlert.info({message:error.error});
+      }).catch(error => {
+        DialogAlert.info({message: error.error});
         this.router.navigate(['/clientes']);
       });
     }
@@ -56,33 +55,33 @@ export class ClienteFormScreen implements OnInit {
 
   public createTelefone(telefone = null) {
     return this.builder.group({
-      numero: [telefone?telefone.numero:null, [Validators.required, ValidatorsHelper.noEmptyString]],
-      descricao: [telefone?telefone.descricao:null, [Validators.required, ValidatorsHelper.noEmptyString]],
-      whatsapp: [telefone?telefone.whatsapp:false, Validators.required]
+      numero: [telefone ? telefone.numero : null, [Validators.required, ValidatorsHelper.noEmptyString]],
+      descricao: [telefone ? telefone.descricao : null, [Validators.required, ValidatorsHelper.noEmptyString]],
+      whatsapp: [telefone ? telefone.whatsapp : false, Validators.required]
     });
   }
 
-  public getFormArrayTelefones(telefones= null) {
-    return this.builder.array(telefones?telefones.map(telefone=>this.createTelefone(telefone)):[  this.createTelefone()]);
+  public getFormArrayTelefones(telefones = null) {
+    return this.builder.array(telefones ? telefones.map(telefone => this.createTelefone(telefone)) : [this.createTelefone()]);
   }
 
   public cleanForm(cliente = null) {
-    const endereco = cliente?cliente.endereco:null;
+    const endereco = cliente ? cliente.endereco : null;
     this.form = this.builder.group({
       nome: [cliente ? cliente.nome : null, [Validators.required, ValidatorsHelper.noEmptyString]],
       email: [cliente ? cliente.email : null, [Validators.required, Validators.email, ValidatorsHelper.noEmptyString]],
       cpf: [cliente ? cliente.cpf : null],
       status: [cliente ? cliente.status : Const.status.ativo, Validators.required],
       endereco: this.builder.group({
-        municipioId: [endereco? endereco.municipioId: null, Validators.required],
-        estadoId: [endereco? endereco.estadoId: null, Validators.required],
-        cep: [endereco? endereco.cep: null],
-        bairro: [endereco? endereco.bairro: null, [Validators.required, ValidatorsHelper.noEmptyString]],
-        rua: [endereco? endereco.rua: null, [Validators.required, ValidatorsHelper.noEmptyString]],
-        numero: [endereco? endereco.numero: null, [Validators.required, ValidatorsHelper.noEmptyString]],
-        complemento: [endereco? endereco.complemento: null, [Validators.required, ValidatorsHelper.noEmptyString]]
+        municipioId: [endereco ? endereco.municipioId : null, Validators.required],
+        estadoId: [endereco ? endereco.estadoId : null, Validators.required],
+        cep: [endereco ? endereco.cep : null],
+        bairro: [endereco ? endereco.bairro : null, [Validators.required, ValidatorsHelper.noEmptyString]],
+        rua: [endereco ? endereco.rua : null, [Validators.required, ValidatorsHelper.noEmptyString]],
+        numero: [endereco ? endereco.numero : null, [Validators.required, ValidatorsHelper.noEmptyString]],
+        complemento: [endereco ? endereco.complemento : null, [Validators.required, ValidatorsHelper.noEmptyString]]
       }),
-      telefones: this.getFormArrayTelefones(cliente?cliente.telefones:null)
+      telefones: this.getFormArrayTelefones(cliente ? cliente.telefones : null)
     });
   }
 
@@ -90,12 +89,12 @@ export class ClienteFormScreen implements OnInit {
   async salvar() {
     if (this.form.valid) {
       let response = null;
-      if(this.idCliente){
-        response = await this.clientService.updateClient(this.idCliente,this.form.value);
-        DialogAlert.info({message:response.data});
-      }else{
+      if (this.idCliente) {
+        response = await this.clientService.updateClient(this.idCliente, this.form.value);
+        DialogAlert.info({message: response.data});
+      } else {
         response = await this.clientService.saveClient(this.form.value);
-        DialogAlert.info({message:response.data});
+        DialogAlert.info({message: response.data});
         this.cleanForm();
       }
 
@@ -130,7 +129,7 @@ export class ClienteFormScreen implements OnInit {
 
   async onChangeEstado(id) {
     this.listaMunicipios = [];
-    console.log(id)
+    console.log(id);
     await this.utilsService.getMunicipios(id).then(response => {
       this.listaMunicipios = response.data;
     });

@@ -74,7 +74,8 @@
 }
 
 .alert {
-  height: 150px !important;
+  height: auto!important;
+  min-height: 150px !important;
   padding: 0 !important;
 }
 

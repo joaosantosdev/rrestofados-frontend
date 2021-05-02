@@ -1,5 +1,5 @@
 
-<div class="dialog-container" [id]="name">
+<div class="dialog-container" [id]="name" (click)="close($event)" >
   <div class="dialog"   [ngClass]="[getClass(),getAlert()]">
     <div class="r1">
       <h4 class="dialog-title">{{title}}</h4>
@@ -7,7 +7,7 @@
         <icon name="close" size="15px"></icon>
       </div>
     </div>
-   
+
     <div class="container-fluid">
       <ng-content></ng-content>
     </div>

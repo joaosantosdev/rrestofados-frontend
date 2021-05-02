@@ -4,18 +4,20 @@
     <form [formGroup]="form" (submit)="salvar()">
       <div class="row">
         <div class="col-12">
-          <h1 class="cl-default-dark">{{title}}</h1>
+          <div class="title-page">
+            <div>{{title}}</div>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-3 mb-2 align-items-start">
           <input-content label="Nome" [control]="getControl('nome')">
-            <input name="nome" formControlName="nome" class="input">
+            <input name="nome" formControlName="nome" class="input" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-3 mb-2 align-items-start">
           <input-content label="Descrição" [control]="getControl('descricao')">
-            <input name="descricao" formControlName="descricao" class="input">
+            <input name="descricao" formControlName="descricao" class="input" maxlength="100">
           </input-content>
         </div>
         <div class="col-md-2 mb-2">
